@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Apply saved / system theme before first paint to avoid a flash of the wrong theme
+  (function(){
+    var saved = localStorage.getItem('acies-theme');
+    var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+<title>ACIES — Association pour la Charité, l'Instruction, l'Éducation et le Social</title>
+<meta name="description" content="ACIES — Association pour la Charité, l'Instruction, l'Éducation et le Social. Organisation humanitaire enregistrée, basée à Lomé, Togo. Éducation, aide humanitaire, eau-hygiène-assainissement et développement communautaire.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#0F5C4C;
+    --forest-deep:#0A3F34;
+    --emerald:#16805F;
+    --indigo:#1B3A6B;
+    --indigo-light:#2C5490;
+    --gold:#C9971C;
+    --gold-light:#E4B94A;
+    --bg:#FBFAF6;
+    --paper:#FFFFFF;
+    --ink:#16201C;
+    --ink-soft:#4C574F;
+    --line:#E4E1D6;
+    --radius:14px;
+    --shadow: 0 12px 30px -14px rgba(15,60,45,0.25);
+    --heading:#0A3F34;
+    --header-bg:rgba(251,250,246,0.92);
+    --soft-bg:#F1F6F2;
+    --soft-bg-2:#EEF5F0;
+    --soft-tag-bg:#F5F1E4;
+    --soft-highlight-bg:#FBF8EE;
+    --input-bg:#FEFEFC;
+    --track-bg:#EDEAE0;
+    --surface-hover:#FFFFFF;
+    --stripe: repeating-linear-gradient(90deg,
+        var(--forest) 0 26px,
+        var(--gold) 26px 40px,
+        var(--indigo) 40px 66px,
+        var(--bg) 66px 72px);
+  }
+
+  /* ---------- DARK THEME ---------- */
+  [data-theme="dark"]{
+    --bg:#0E1613;
+    --paper:#182019;
+    --ink:#ECEAE1;
+    --ink-soft:#A9B5AC;
+    --line:#2C362F;
+    --heading:#F1EDE0;
+    --header-bg:rgba(14,22,19,0.86);
+    --soft-bg:#1C2620;
+    --soft-bg-2:#1B2621;
+    --soft-tag-bg:#2A2417;
+    --soft-highlight-bg:#241F14;
+    --input-bg:#1B231D;
+    --track-bg:#2A342C;
+    --surface-hover:#202B23;
+    --forest:#2FAE84;
+    --emerald:#2FAE84;
+    --indigo-light:#5C86C6;
+    --gold:#DDA934;
+    --gold-light:#EFC868;
+    --shadow: 0 12px 30px -14px rgba(0,0,0,0.55);
+  }
+  [data-theme="dark"] .hero-badge{background:rgba(24,32,25,0.94);}
+  [data-theme="dark"] .status-tag{background:rgba(24,32,25,0.9);}
+  [data-theme="dark"] .lightbox-close{color:#fff;}
+  [data-theme="dark"] .value-pill b{color:var(--gold-light);}
+  [data-theme="dark"] .board-photo{border-color:var(--paper);}
+  [data-theme="dark"] .brand-mark{box-shadow:0 0 0 1px rgba(255,255,255,0.06);}
+
+  body, header, .about-card, .program-card, .project-card, .report-card, .form-card,
+  .audience-card, .value-pill, .filter-btn, .cookie-banner, .mobile-drawer,
+  input, textarea, select, .drawer-overlay, .lang-toggle, .theme-toggle{
+    transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  h1,h2,h3,h4{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; color:var(--heading);}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:500;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{content:""; width:22px; height:2px; background:var(--gold); display:inline-block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  section{padding:96px 0;}
+  .stripe-divider{
+    height:6px; width:100%;
+    background:var(--stripe);
+    background-size:72px 100%;
+  }
+
+  /* visually-hidden for lang toggle state text */
+  .vh{position:absolute; width:1px;height:1px; overflow:hidden; clip:rect(0 0 0 0);}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:var(--header-bg);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; max-width:1180px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-mark{
+    width:44px; height:44px; border-radius:10px;
+    background:conic-gradient(from 220deg, var(--forest), var(--indigo), var(--gold), var(--forest));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Fraunces',serif; font-weight:700; font-size:1.1rem;
+    flex-shrink:0;
+  }
+  .brand-name{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; color:var(--heading); line-height:1.1;}
+  .brand-sub{font-size:0.68rem; color:var(--ink-soft); letter-spacing:0.03em;}
+  nav.links{display:flex; gap:26px; align-items:center;}
+  nav.links a{
+    font-size:0.92rem; font-weight:500; color:var(--ink-soft);
+    position:relative; padding:4px 0;
+  }
+  nav.links a:hover{color:var(--forest);}
+  .nav-actions{display:flex; gap:12px; align-items:center;}
+  .lang-toggle{
+    display:flex; border:1px solid var(--line); border-radius:20px; overflow:hidden;
+    font-family:'IBM Plex Mono', monospace; font-size:0.72rem;
+  }
+  .lang-toggle button{
+    padding:7px 12px; background:transparent; border:none; cursor:pointer;
+    color:var(--ink-soft); font-family:inherit; font-size:inherit;
+  }
+  .lang-toggle button.active{background:var(--forest); color:#fff;}
+  .theme-toggle{
+    display:flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--line); background:var(--paper);
+    cursor:pointer; font-size:1rem; flex-shrink:0;
+  }
+  .theme-toggle:hover{border-color:var(--forest);}
+  .drawer-theme{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .drawer-theme span{font-weight:500; color:var(--ink); font-size:0.95rem;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 22px; border-radius:30px; font-weight:600; font-size:0.9rem;
+    border:1.5px solid transparent; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-gold{background:var(--gold); color:#2b1e00; box-shadow:0 8px 20px -8px rgba(201,151,28,0.6);}
+  .btn-outline{border-color:var(--forest); color:var(--forest); background:transparent;}
+  .btn-outline:hover{background:var(--forest); color:#fff;}
+  .btn-ghost{color:var(--indigo); border-color:var(--indigo);}
+  .menu-toggle{display:none; background:none; border:none; font-size:1.6rem; cursor:pointer; color:var(--heading);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:88px 0 70px;
+    background:
+      radial-gradient(circle at 85% 10%, rgba(201,151,28,0.14), transparent 45%),
+      radial-gradient(circle at 5% 90%, rgba(27,58,107,0.10), transparent 45%);
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
+  }
+  .hero h1{font-size:clamp(2.1rem, 4.2vw, 3.3rem); line-height:1.08; margin:18px 0 20px;}
+  .hero .motto{
+    font-family:'Fraunces', serif; font-style:italic; font-weight:500;
+    color:var(--indigo); font-size:1.15rem; margin-bottom:22px;
+  }
+  .hero p.lead{color:var(--ink-soft); font-size:1.05rem; max-width:52ch; margin-bottom:30px;}
+  .hero-ctas{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:20px;}
+  .hero-media{position:relative; border-radius:22px; overflow:hidden; box-shadow:var(--shadow); aspect-ratio:4/4.6;}
+  .hero-media img{width:100%; height:100%; object-fit:cover;}
+  .hero-media::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,40,30,0) 55%, rgba(10,40,30,0.55) 100%);
+  }
+  .hero-badge{
+    position:absolute; left:18px; bottom:18px; z-index:2;
+    background:rgba(255,255,255,0.94); backdrop-filter:blur(6px);
+    padding:12px 16px; border-radius:12px; display:flex; gap:10px; align-items:center;
+    box-shadow:0 10px 24px -10px rgba(0,0,0,0.3);
+  }
+  .hero-badge .num{font-family:'Fraunces',serif; font-weight:700; color:var(--forest); font-size:1.3rem;}
+  .hero-badge .lbl{font-size:0.72rem; color:var(--ink-soft); line-height:1.15;}
+
+  /* ---------- IMPACT STRIP ---------- */
+  .impact{
+    background:var(--forest-deep); color:#fff; padding:52px 0;
+    position:relative;
+  }
+  .impact-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px 20px; text-align:center;}
+  .video-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .video-grid video{width:100%; border-radius:var(--radius); background:#000; box-shadow:var(--shadow);}
+  .impact .num{
+    font-family:'Fraunces',serif; font-weight:700; font-size:clamp(1.6rem,3vw,2.4rem);
+    color:var(--gold-light);
+  }
+  .impact .lbl{font-size:0.82rem; color:#CFE0D8; margin-top:6px;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .sec-head{max-width:640px; margin-bottom:48px;}
+  .sec-head h2{font-size:clamp(1.6rem,3vw,2.3rem); margin-top:12px;}
+  .sec-head p{color:var(--ink-soft); margin-top:12px;}
+  .sec-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;}
+  .about-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px; margin-bottom:16px;
+  }
+  .about-card h3{font-size:1.05rem; margin-bottom:8px;}
+  .about-card p{color:var(--ink-soft); font-size:0.95rem;}
+  .values-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+  .value-pill{
+    background:var(--soft-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; font-size:0.9rem;
+  }
+  .value-pill b{display:block; color:var(--forest); font-family:'Fraunces',serif; font-size:0.98rem; margin-bottom:2px;}
+  .board-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:26px;}
+  .board-card{text-align:center;}
+  .board-photo{
+    width:100%; aspect-ratio:1/1; border-radius:50%; object-fit:cover; margin-bottom:10px;
+    border:3px solid var(--paper); box-shadow:var(--shadow);
+  }
+  .board-card .role{font-size:0.78rem; color:var(--gold); font-family:'IBM Plex Mono',monospace;}
+  .board-card .name{font-family:'Fraunces',serif; font-weight:600; font-size:0.98rem;}
+
+  /* ---------- PROGRAMS ---------- */
+  .programs-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  .program-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px; transition:transform .18s ease, box-shadow .18s ease; cursor:pointer;
+  }
+  .program-card:hover{transform:translateY(-5px); box-shadow:var(--shadow);}
+  .program-icon{
+    width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:1.35rem; margin-bottom:16px; background:var(--soft-bg-2); color:var(--forest);
+  }
+  .program-card h3{font-size:1.02rem; margin-bottom:8px;}
+  .program-card p{font-size:0.88rem; color:var(--ink-soft); margin-bottom:14px;}
+  .program-card .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .program-card .tags span{
+    font-size:0.68rem; font-family:'IBM Plex Mono',monospace; background:var(--soft-tag-bg); color:var(--gold); padding:3px 8px; border-radius:6px;
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .projects-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .project-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:0 4px 14px -10px rgba(0,0,0,0.15);
+  }
+  .project-img{aspect-ratio:16/10; overflow:hidden; position:relative;}
+  .project-img img{width:100%; height:100%; object-fit:cover;}
+  .status-tag{
+    position:absolute; top:12px; left:12px; font-size:0.68rem; font-family:'IBM Plex Mono',monospace;
+    padding:5px 10px; border-radius:20px; background:rgba(255,255,255,0.92); color:var(--forest); font-weight:600;
+  }
+  .project-body{padding:20px;}
+  .project-body h3{font-size:1.05rem; margin-bottom:8px;}
+  .project-body p{font-size:0.88rem; color:var(--ink-soft); margin-bottom:14px;}
+  .project-meta{display:flex; justify-content:space-between; font-size:0.76rem; color:var(--ink-soft); margin-bottom:10px; font-family:'IBM Plex Mono',monospace;}
+  .progress-track{height:8px; background:var(--track-bg); border-radius:6px; overflow:hidden; margin-bottom:8px;}
+  .progress-fill{height:100%; background:linear-gradient(90deg, var(--forest), var(--emerald));}
+  .progress-label{display:flex; justify-content:space-between; font-size:0.75rem; color:var(--ink-soft);}
+
+  /* ---------- REPORTS ---------- */
+  .reports-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:16px;}
+  .report-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:22px 18px; text-align:center;
+    transition:border-color .15s ease;
+  }
+  .report-card:hover{border-color:var(--forest);}
+  .report-icon{font-size:1.6rem; margin-bottom:10px;}
+  .report-card h4{font-size:0.86rem; margin-bottom:4px; color:var(--heading);}
+  .report-card .year{font-size:0.72rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; margin-bottom:12px;}
+  .report-dl{font-size:0.78rem; color:var(--indigo); font-weight:600; display:inline-flex; align-items:center; gap:6px;}
+
+  /* ---------- NEWS ---------- */
+  .news-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:22px;}
+  .news-card{border-radius:var(--radius); overflow:hidden; background:var(--paper); border:1px solid var(--line);}
+  .news-card.feature{grid-row:span 2;}
+  .news-img{aspect-ratio:16/10; overflow:hidden;}
+  .news-card.feature .news-img{aspect-ratio:16/13;}
+  .news-img img{width:100%; height:100%; object-fit:cover;}
+  .news-body{padding:18px;}
+  .news-tag{font-size:0.68rem; font-family:'IBM Plex Mono',monospace; color:var(--gold); text-transform:uppercase; letter-spacing:0.06em;}
+  .news-body h3{font-size:1rem; margin:8px 0; line-height:1.3;}
+  .news-body p{font-size:0.85rem; color:var(--ink-soft);}
+  .news-date{font-size:0.75rem; color:var(--ink-soft); margin-top:10px; display:block;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery-filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px;}
+  .filter-btn{
+    padding:8px 16px; border-radius:20px; border:1px solid var(--line); background:var(--paper);
+    font-size:0.82rem; cursor:pointer; color:var(--ink-soft); font-weight:500;
+  }
+  .filter-btn.active{background:var(--forest); color:#fff; border-color:var(--forest);}
+  .gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:150px; gap:12px;}
+  .gallery-item{border-radius:10px; overflow:hidden; cursor:pointer; position:relative;}
+  .gallery-item img{width:100%; height:100%; object-fit:cover; transition:transform .3s ease;}
+  .gallery-item:hover img{transform:scale(1.07);}
+  .gallery-item.tall{grid-row:span 2;}
+  .gallery-item.wide{grid-column:span 2;}
+  .lightbox{
+    position:fixed; inset:0; background:rgba(10,20,15,0.92); z-index:300;
+    display:none; align-items:center; justify-content:center; padding:40px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:90vw; max-height:85vh; border-radius:8px;}
+  .lightbox-close{position:absolute; top:24px; right:32px; color:#fff; font-size:2rem; cursor:pointer; background:none; border:none;}
+
+  /* ---------- PARTNERSHIPS ---------- */
+  .partner-audience{display:grid; grid-template-columns:repeat(5,1fr); gap:16px; margin-bottom:44px;}
+  .audience-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px; text-align:center;
+  }
+  .audience-card .ic{font-size:1.6rem; margin-bottom:8px;}
+  .audience-card h4{font-size:0.9rem;}
+  .partner-benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .benefit-card{padding:22px; border-left:3px solid var(--gold); background:var(--soft-highlight-bg); border-radius:8px;}
+  .benefit-card h4{font-size:0.98rem; margin-bottom:6px;}
+  .benefit-card p{font-size:0.86rem; color:var(--ink-soft);}
+  .logos-row{
+    display:flex; gap:36px; align-items:center; justify-content:center; flex-wrap:wrap;
+    margin-top:44px; padding-top:36px; border-top:1px solid var(--line);
+  }
+  .logos-row .logo-chip{
+    font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--ink-soft);
+    border:1px dashed var(--line); padding:10px 18px; border-radius:8px;
+  }
+
+  /* ---------- DONATE ---------- */
+  .donate-section{background:var(--forest-deep); color:#fff; position:relative; overflow:hidden;}
+  .donate-section::before{
+    content:""; position:absolute; inset:0; opacity:0.5;
+    background:radial-gradient(circle at 20% 20%, rgba(201,151,28,0.18), transparent 45%),
+               radial-gradient(circle at 85% 80%, rgba(27,58,107,0.35), transparent 45%);
+  }
+  .donate-grid{display:grid; grid-template-columns:1fr 1fr; gap:56px; position:relative; z-index:1;}
+  .donate-section .eyebrow{color:var(--gold-light);}
+  .donate-section h2{color:#fff;}
+  .donate-section p{color:#D9E4DC;}
+  .donate-reasons{list-style:none; margin-top:22px; display:flex; flex-direction:column; gap:14px;}
+  .donate-reasons li{display:flex; gap:12px; font-size:0.92rem; color:#E7EFE9;}
+  .donate-reasons li .chk{color:var(--gold-light); font-weight:700;}
+  .donate-card{
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    border-radius:18px; padding:32px; backdrop-filter:blur(6px);
+  }
+  .amount-row{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:20px 0;}
+  .amount-row button{
+    padding:12px 0; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:transparent; color:#fff;
+    font-family:'IBM Plex Mono',monospace; cursor:pointer; font-size:0.88rem;
+  }
+  .amount-row button.active, .amount-row button:hover{background:var(--gold); color:#2b1e00; border-color:var(--gold);}
+  .donate-select{color-scheme: dark;}
+  .donate-select option{color:#16201C; background:#fff;}
+  .method-list{display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 24px;}
+  .method-list span{
+    font-size:0.78rem; background:rgba(255,255,255,0.1); padding:7px 12px; border-radius:20px; color:#EFF3F0;
+  }
+  .faq-item{border-bottom:1px solid rgba(255,255,255,0.15); padding:16px 0;}
+  .faq-q{display:flex; justify-content:space-between; cursor:pointer; font-weight:600; font-size:0.95rem; color:#fff;}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .25s ease; font-size:0.88rem; color:#CBD9CF;}
+  .faq-item.open .faq-a{max-height:220px; margin-top:10px;}
+  .faq-item.open .faq-q .plus{transform:rotate(45deg);}
+  .faq-q .plus{transition:transform .2s ease; font-size:1.2rem; color:var(--gold-light);}
+
+  /* ---------- CONTACT ---------- */
+  .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px;}
+  .contact-info-item{display:flex; gap:14px; margin-bottom:24px;}
+  .contact-info-item .ic{
+    width:42px; height:42px; border-radius:10px; background:var(--soft-bg-2); color:var(--forest);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.1rem;
+  }
+  .contact-info-item h4{font-size:0.92rem; margin-bottom:2px;}
+  .contact-info-item p{font-size:0.88rem; color:var(--ink-soft);}
+  .social-row{display:flex; gap:10px; margin-top:18px;}
+  .social-row a{
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:0.9rem;
+    color:var(--forest);
+  }
+  .social-row a:hover{background:var(--forest); color:#fff;}
+  .map-embed{border-radius:12px; overflow:hidden; margin-top:22px; border:1px solid var(--line);}
+  .form-card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:30px; box-shadow:var(--shadow);}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
+  .form-row.full{grid-template-columns:1fr;}
+  label{font-size:0.8rem; color:var(--ink-soft); display:block; margin-bottom:6px; font-weight:500;}
+  input, textarea, select{
+    width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:8px; font-family:inherit; font-size:0.92rem;
+    background:var(--input-bg); color:var(--ink);
+  }
+  input:focus, textarea:focus, select:focus{outline:2px solid var(--forest); outline-offset:1px; border-color:var(--forest);}
+  textarea{resize:vertical; min-height:110px;}
+
+  /* ---------- NEWSLETTER ---------- */
+  .newsletter{background:var(--soft-bg); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .newsletter-inner{display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap;}
+  .newsletter form{display:flex; gap:10px; flex:1; max-width:440px; min-width:280px;}
+  .newsletter input{flex:1;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--forest-deep); color:#CFE0D8; padding-top:64px;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:44px;}
+  .footer-brand .brand-name, .footer-brand .brand-sub{color:#fff;}
+  footer h4{color:#fff; font-family:'Fraunces',serif; font-size:1rem; margin-bottom:16px;}
+  footer ul{list-style:none;}
+  footer ul li{margin-bottom:10px; font-size:0.88rem;}
+  footer ul li a:hover{color:var(--gold-light);}
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.12); padding:22px 0; display:flex; justify-content:space-between;
+    font-size:0.78rem; color:#9FB6A9; flex-wrap:wrap; gap:12px;
+  }
+  .footer-bottom a{color:#9FB6A9;}
+  .footer-legal{display:flex; gap:18px; flex-wrap:wrap;}
+  .cookie-banner{
+    position:fixed; bottom:16px; left:16px; right:16px; max-width:520px; margin:0 auto;
+    background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow);
+    z-index:250; display:none; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  }
+  .cookie-banner.show{display:flex;}
+  .cookie-banner p{font-size:0.82rem; color:var(--ink-soft);}
+  .cookie-actions{display:flex; gap:10px;}
+  .cookie-actions button{padding:8px 14px; font-size:0.8rem; border-radius:8px;}
+
+  /* fade-in on scroll */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.show{opacity:1; transform:none;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1024px){
+    .hero-grid, .about-grid, .contact-grid, .donate-grid{grid-template-columns:1fr;}
+    .programs-grid{grid-template-columns:repeat(2,1fr);}
+    .projects-grid{grid-template-columns:repeat(2,1fr);}
+    .news-grid{grid-template-columns:1fr 1fr;}
+    .news-card.feature{grid-column:span 2; grid-row:auto;}
+    .reports-grid{grid-template-columns:repeat(3,1fr);}
+    .impact-grid{grid-template-columns:repeat(3,1fr);}
+    .board-grid{grid-template-columns:repeat(2,1fr);}
+    .partner-audience{grid-template-columns:repeat(3,1fr);}
+    .partner-benefits{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:760px){
+    nav.links, .nav-actions .btn-outline{display:none;}
+    .menu-toggle{display:block;}
+    .lang-toggle{display:flex;}
+    section{padding:64px 0;}
+    .programs-grid, .projects-grid, .news-grid, .reports-grid, .impact-grid, .board-grid, .partner-audience, .partner-benefits{grid-template-columns:1fr 1fr;}
+    .news-card.feature{grid-column:span 2;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .video-grid{grid-template-columns:1fr 1fr;}
+    .amount-row{grid-template-columns:repeat(2,1fr);}
+    .form-row{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:520px){
+    .impact-grid{grid-template-columns:repeat(2,1fr);}
+    .programs-grid, .projects-grid, .news-grid, .reports-grid, .board-grid, .partner-audience, .partner-benefits, .gallery-grid, .video-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:760px){
+    #projet-en-cours .project-card{grid-template-columns:1fr !important;}
+    #projet-en-cours .project-img{height:260px;}
+  }
+
+  /* mobile drawer */
+  .mobile-drawer{
+    position:fixed; top:0; right:-320px; width:290px; height:100%; background:var(--paper); z-index:200;
+    box-shadow:-8px 0 30px rgba(0,0,0,0.15); transition:right .25s ease; padding:28px 24px; overflow-y:auto;
+  }
+  .mobile-drawer.open{right:0;}
+  .mobile-drawer a{display:block; padding:12px 0; border-bottom:1px solid var(--line); font-weight:500; color:var(--ink);}
+  .drawer-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:190; display:none;}
+  .drawer-overlay.show{display:block;}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="nav">
+    <div class="brand">
+      <div class="brand-mark"><img src="images/logo-acies.png" alt="Logo ACIES" style="width:100%;height:100%;object-fit:cover;border-radius:10px;"></div>
+      <div>
+        <div class="brand-name">ACIES</div>
+        <div class="brand-sub i18n" data-fr="Charité · Instruction · Éducation · Social" data-en="Charity · Instruction · Education · Social">Charité · Instruction · Éducation · Social</div>
+      </div>
+    </div>
+    <nav class="links">
+      <a href="#apropos" class="i18n" data-fr="À propos" data-en="About">À propos</a>
+      <a href="#projet-en-cours" class="i18n" data-fr="Langabou" data-en="Langabou">Langabou</a>
+      <a href="#programmes" class="i18n" data-fr="Programmes" data-en="Programs">Programmes</a>
+      <a href="#projets" class="i18n" data-fr="Projets" data-en="Projects">Projets</a>
+      <a href="#rapports" class="i18n" data-fr="Documents" data-en="Documents">Documents</a>
+      <a href="#galerie" class="i18n" data-fr="Galerie" data-en="Gallery">Galerie</a>
+      <a href="#partenariats" class="i18n" data-fr="Partenariats" data-en="Partnerships">Partenariats</a>
+      <a href="#contact" class="i18n" data-fr="Contact" data-en="Contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang-toggle" role="group" aria-label="Langue / Language">
+        <button id="lang-fr" class="active" onclick="setLang('fr')">FR</button>
+        <button id="lang-en" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Basculer le thème clair/sombre">🌙</button>
+      <a href="#don" class="btn btn-outline i18n" data-fr="Devenir bénévole" data-en="Volunteer" style="display:none">Devenir bénévole</a>
+      <a href="#don" class="btn btn-gold i18n" data-fr="Faire un don" data-en="Donate">Faire un don</a>
+      <button class="menu-toggle" onclick="toggleDrawer(true)" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="overlay" onclick="toggleDrawer(false)"></div>
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-theme">
+    <span class="i18n" data-fr="Thème sombre" data-en="Dark theme">Thème sombre</span>
+    <button class="theme-toggle" id="themeToggleMobile" onclick="toggleTheme()" aria-label="Basculer le thème clair/sombre">🌙</button>
+  </div>
+  <a href="#apropos" onclick="toggleDrawer(false)" class="i18n" data-fr="À propos" data-en="About">À propos</a>
+  <a href="#projet-en-cours" onclick="toggleDrawer(false)" class="i18n" data-fr="Langabou" data-en="Langabou">Langabou</a>
+  <a href="#programmes" onclick="toggleDrawer(false)" class="i18n" data-fr="Programmes" data-en="Programs">Programmes</a>
+  <a href="#projets" onclick="toggleDrawer(false)" class="i18n" data-fr="Projets" data-en="Projects">Projets</a>
+  <a href="#rapports" onclick="toggleDrawer(false)" class="i18n" data-fr="Documents" data-en="Documents">Documents</a>
+  <a href="#galerie" onclick="toggleDrawer(false)" class="i18n" data-fr="Galerie" data-en="Gallery">Galerie</a>
+  <a href="#partenariats" onclick="toggleDrawer(false)" class="i18n" data-fr="Partenariats" data-en="Partnerships">Partenariats</a>
+  <a href="#don" onclick="toggleDrawer(false)" class="i18n" data-fr="Faire un don" data-en="Donate">Faire un don</a>
+  <a href="#contact" onclick="toggleDrawer(false)" class="i18n" data-fr="Contact" data-en="Contact">Contact</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="accueil">
+  <div class="wrap hero-grid">
+    <div class="reveal show">
+      <span class="eyebrow i18n" data-fr="Lomé, Togo — depuis 2022" data-en="Lomé, Togo — since 2022">Lomé, Togo — depuis 2022</span>
+      <h1 class="i18n" data-fr="Bâtir des communautés résilientes, un enfant à la fois." data-en="Building resilient communities, one child at a time.">Bâtir des communautés résilientes, un enfant à la fois.</h1>
+      <p class="motto i18n" data-fr="« Ensemble, nous transformons la compassion en action durable. »" data-en="“Together, we transform compassion into sustainable action.”">« Ensemble, nous transformons la compassion en action durable. »</p>
+      <p class="lead i18n" data-fr="L'ACIES (Association pour la Charité, l'Instruction, l'Éducation et le Social) est une organisation humanitaire à but non lucratif enregistrée au Togo, engagée pour l'éducation des enfants vulnérables, l'aide humanitaire, l'eau-hygiène-assainissement et le développement communautaire." data-en="ACIES (Association for Charity, Instruction, Education and Social Welfare) is a registered non-profit humanitarian organization in Togo, committed to education for vulnerable children, humanitarian assistance, water-hygiene-sanitation and community development.">L'ACIES (Association pour la Charité, l'Instruction, l'Éducation et le Social) est une organisation humanitaire à but non lucratif enregistrée au Togo, engagée pour l'éducation des enfants vulnérables, l'aide humanitaire, l'eau-hygiène-assainissement et le développement communautaire.</p>
+      <div class="hero-ctas">
+        <a href="#don" class="btn btn-gold i18n" data-fr="Faire un don" data-en="Donate">Faire un don</a>
+        <a href="#partenariats" class="btn btn-outline i18n" data-fr="Devenir partenaire" data-en="Become a partner">Devenir partenaire</a>
+        <a href="#contact" class="btn btn-ghost i18n" data-fr="Devenir bénévole" data-en="Volunteer">Devenir bénévole</a>
+      </div>
+    </div>
+    <div class="hero-media reveal show">
+      <img src="images/school-kits-night.jpg" alt="Élèves togolais avec leurs kits scolaires ACIES">
+      <div class="hero-badge">
+        <div class="num">2022</div>
+        <div class="lbl i18n" data-fr="année de fondation à Lomé" data-en="founded in Lomé">année de fondation à Lomé</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="stripe-divider"></div>
+
+<!-- ============ IMPACT STRIP ============ -->
+<section class="impact" style="padding:52px 0;">
+  <div class="wrap impact-grid">
+    <div class="reveal">
+      <div class="num">2022</div>
+      <div class="lbl i18n" data-fr="année de fondation" data-en="year founded">année de fondation</div>
+    </div>
+    <div class="reveal">
+      <div class="num">2023</div>
+      <div class="lbl i18n" data-fr="enregistrement officiel" data-en="officially registered">enregistrement officiel</div>
+    </div>
+    <div class="reveal">
+      <div class="num" data-count="4">0</div>
+      <div class="lbl i18n" data-fr="domaines d'intervention" data-en="areas of intervention">domaines d'intervention</div>
+    </div>
+    <div class="reveal">
+      <div class="num" data-count="7">0</div>
+      <div class="lbl i18n" data-fr="initiatives menées 2024–2026" data-en="initiatives carried out 2024–2026">initiatives menées 2024–2026</div>
+    </div>
+    <div class="reveal">
+      <div class="num">2 625 000</div>
+      <div class="lbl i18n" data-fr="FCFA investis sur le terrain (2024–2025)" data-en="FCFA invested in the field (2024–2025)">FCFA investis sur le terrain (2024–2025)</div>
+    </div>
+    <div class="reveal">
+      <div class="num" data-count="360">0</div>
+      <div class="lbl i18n" data-fr="élèves visés — nouveau projet Langabou" data-en="pupils targeted — new Langabou project">élèves visés — nouveau projet Langabou</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="apropos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="Qui nous sommes" data-en="Who we are">Qui nous sommes</span>
+      <h2 class="i18n" data-fr="Une gouvernance transparente, une mission claire" data-en="Transparent governance, a clear mission">Une gouvernance transparente, une mission claire</h2>
+      <p class="i18n" data-fr="L'ACIES est une organisation humanitaire à but non lucratif basée à Lomé, au Togo. Fondée en 2022 et officiellement enregistrée en 2023, elle œuvre auprès des enfants vulnérables et des communautés défavorisées à travers l'éducation, l'aide humanitaire et le développement durable, en étroite collaboration avec les communautés locales et des bénévoles." data-en="ACIES is a registered non-profit humanitarian organization based in Lomé, Togo. Founded in 2022 and officially registered in 2023, it works with vulnerable children and disadvantaged communities through education, humanitarian assistance and sustainable development, in close collaboration with local communities and volunteers.">L'ACIES est une organisation humanitaire à but non lucratif basée à Lomé, au Togo. Fondée en 2022 et officiellement enregistrée en 2023, elle œuvre auprès des enfants vulnérables et des communautés défavorisées à travers l'éducation, l'aide humanitaire et le développement durable, en étroite collaboration avec les communautés locales et des bénévoles.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-card">
+          <h3 class="i18n" data-fr="Notre histoire" data-en="Our history">Notre histoire</h3>
+          <p class="i18n" data-fr="Fondée le 13 août 2022 à Lomé, l'ACIES a pour but de promouvoir la scolarisation des jeunes en milieu rural, la santé et le développement des communautés rurales, afin d'atteindre les objectifs du développement durable. Depuis sa création, l'association mène des actions concrètes auprès des enfants et familles vulnérables du Togo." data-en="Founded on August 13, 2022 in Lomé, ACIES' purpose is to promote schooling for young people in rural areas, health, and the development of rural communities, in order to achieve the Sustainable Development Goals. Since its creation, the association has carried out concrete actions for vulnerable children and families across Togo.">Fondée le 13 août 2022 à Lomé, l'ACIES a pour but de promouvoir la scolarisation des jeunes en milieu rural, la santé et le développement des communautés rurales, afin d'atteindre les objectifs du développement durable. Depuis sa création, l'association mène des actions concrètes auprès des enfants et familles vulnérables du Togo.</p>
+        </div>
+        <div class="about-card">
+          <h3 class="i18n" data-fr="Mission" data-en="Mission">Mission</h3>
+          <p class="i18n" data-fr="Promouvoir une éducation de qualité pour les enfants vulnérables ; soutenir les orphelins et familles défavorisées ; améliorer l'alphabétisation et l'accès à l'éducation ; fournir une aide humanitaire en situation d'urgence ; favoriser l'accès à l'eau potable et à l'assainissement ; encourager un développement communautaire durable." data-en="Promote quality education for vulnerable children; support orphans and disadvantaged families; improve literacy and educational opportunities; provide humanitarian assistance during emergencies; promote access to clean water and sanitation; encourage sustainable community development.">Promouvoir une éducation de qualité pour les enfants vulnérables ; soutenir les orphelins et familles défavorisées ; améliorer l'alphabétisation et l'accès à l'éducation ; fournir une aide humanitaire en situation d'urgence ; favoriser l'accès à l'eau potable et à l'assainissement ; encourager un développement communautaire durable.</p>
+        </div>
+        <div class="about-card">
+          <h3 class="i18n" data-fr="Vision" data-en="Vision">Vision</h3>
+          <p class="i18n" data-fr="Bâtir des communautés résilientes où chaque enfant a accès à l'éducation, à l'espoir et à des opportunités pour un avenir meilleur." data-en="To build resilient communities where every child has access to education, hope and opportunities for a better future.">Bâtir des communautés résilientes où chaque enfant a accès à l'éducation, à l'espoir et à des opportunités pour un avenir meilleur.</p>
+        </div>
+        <div class="about-card">
+          <h3 class="i18n" data-fr="Enregistrement légal" data-en="Legal registration">Enregistrement légal</h3>
+          <p class="i18n" data-fr="Association enregistrée conformément à la loi togolaise. Récépissé de déclaration N° 0971/MATDDT-SG-DLPAP-DOCA délivré le 28 août 2023 par le Ministère de l'Administration Territoriale, de la Décentralisation et de la Chefferie Coutumière. Siège social : Cacavéli, Préfecture d'Agoè-Nyivé, 05 BP 91, Lomé." data-en="Association registered under Togolese law. Declaration receipt N° 0971/MATDDT-SG-DLPAP-DOCA issued on August 28, 2023 by the Ministry of Territorial Administration, Decentralization and Customary Chieftaincy. Head office: Cacavéli, Agoè-Nyivé Prefecture, 05 BP 91, Lomé.">Association enregistrée conformément à la loi togolaise. Récépissé de déclaration N° 0971/MATDDT-SG-DLPAP-DOCA délivré le 28 août 2023 par le Ministère de l'Administration Territoriale, de la Décentralisation et de la Chefferie Coutumière. Siège social : Cacavéli, Préfecture d'Agoè-Nyivé, 05 BP 91, Lomé.</p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <h3 class="i18n" data-fr="Nos valeurs" data-en="Our values" style="margin-bottom:14px;">Nos valeurs</h3>
+        <div class="values-list">
+          <div class="value-pill"><b class="i18n" data-fr="Compassion" data-en="Compassion">Compassion</b><span class="i18n" data-fr="L'humain au centre de nos décisions" data-en="People at the center of our decisions">L'humain au centre de nos décisions</span></div>
+          <div class="value-pill"><b class="i18n" data-fr="Intégrité" data-en="Integrity">Intégrité</b><span class="i18n" data-fr="Rigueur et honnêteté dans chaque action" data-en="Rigor and honesty in every action">Rigueur et honnêteté dans chaque action</span></div>
+          <div class="value-pill"><b class="i18n" data-fr="Transparence" data-en="Transparency">Transparence</b><span class="i18n" data-fr="Une gestion ouverte de chaque projet" data-en="Open management of every project">Une gestion ouverte de chaque projet</span></div>
+          <div class="value-pill"><b class="i18n" data-fr="Redevabilité" data-en="Accountability">Redevabilité</b><span class="i18n" data-fr="Des comptes rendus envers nos partenaires" data-en="Accountable reporting to our partners">Des comptes rendus envers nos partenaires</span></div>
+          <div class="value-pill"><b class="i18n" data-fr="Humanité" data-en="Humanity">Humanité</b><span class="i18n" data-fr="La dignité de chaque personne respectée" data-en="The dignity of every person respected">La dignité de chaque personne respectée</span></div>
+          <div class="value-pill"><b class="i18n" data-fr="Partenariat" data-en="Partnership">Partenariat</b><span class="i18n" data-fr="Construire ensemble avec les communautés" data-en="Building together with communities">Construire ensemble avec les communautés</span></div>
+          <div class="value-pill"><b class="i18n" data-fr="Respect" data-en="Respect">Respect</b><span class="i18n" data-fr="L'écoute des besoins de chaque communauté" data-en="Listening to each community's needs">L'écoute des besoins de chaque communauté</span></div>
+          <div class="value-pill"><b class="i18n" data-fr="Durabilité" data-en="Sustainability">Durabilité</b><span class="i18n" data-fr="Des solutions pensées pour durer" data-en="Solutions built to last">Des solutions pensées pour durer</span></div>
+        </div>
+
+        <h3 class="i18n" data-fr="Direction" data-en="Leadership" style="margin:32px 0 6px;">Direction</h3>
+        <p class="i18n" data-fr="L'association est dirigée par son président fondateur." data-en="The association is led by its founding president." style="color:var(--ink-soft); font-size:0.9rem; margin-bottom:16px;">L'association est dirigée par son président fondateur.</p>
+        <div class="board-card" style="display:flex; align-items:center; gap:16px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:20px; text-align:left;">
+          <div style="width:64px; height:64px; border-radius:50%; background:var(--forest); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:700; font-size:1.3rem; flex-shrink:0;">MA</div>
+          <div>
+            <div class="name">MAMADOU Assoumanou</div>
+            <div class="role i18n" data-fr="Président" data-en="President">Président</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- ============ CURRENT PROJECT: LANGABOU ============ -->
+<section id="projet-en-cours" style="background:var(--paper);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="Projet en cours de financement" data-en="Project currently seeking funding">Projet en cours de financement</span>
+      <h2 class="i18n" data-fr="Distribution de kits scolaires à Langabou" data-en="School kit distribution in Langabou">Distribution de kits scolaires à Langabou</h2>
+      <p class="i18n" data-fr="Notre nouvelle proposition de projet, soumise en juillet 2026, vise à équiper 360 élèves de trois écoles primaires publiques de Langabou, dans la préfecture de Blitta." data-en="Our new project proposal, submitted in July 2026, aims to equip 360 pupils across three public primary schools in Langabou, Blitta Prefecture.">Notre nouvelle proposition de projet, soumise en juillet 2026, vise à équiper 360 élèves de trois écoles primaires publiques de Langabou, dans la préfecture de Blitta.</p>
+    </div>
+    <div class="project-card reveal" style="display:grid; grid-template-columns:1.1fr 1fr; gap:0; overflow:hidden; max-width:960px; margin:0 auto;">
+      <div class="project-img" style="height:auto;">
+        <img src="images/langabou-proposal-cover.jpg" alt="Élèves de Langabou, Préfecture de Blitta, Togo" style="height:100%; object-fit:cover;">
+        <span class="status-tag i18n" data-fr="Recherche de financement" data-en="Seeking funding" style="background:var(--gold);">Recherche de financement</span>
+      </div>
+      <div class="project-body" style="padding:28px;">
+        <h3 class="i18n" data-fr="Projet de distribution de kits scolaires" data-en="School Kit Distribution Project">Projet de distribution de kits scolaires</h3>
+        <p class="i18n" data-fr="Fournir des kits scolaires complets à 360 élèves de trois écoles primaires publiques de Langabou, pour un meilleur accès à l'éducation et un avenir plus prometteur." data-en="Provide complete school kits to 360 pupils across three public primary schools in Langabou, improving access to education and building better futures.">Fournir des kits scolaires complets à 360 élèves de trois écoles primaires publiques de Langabou, pour un meilleur accès à l'éducation et un avenir plus prometteur.</p>
+        <div class="project-meta" style="flex-wrap:wrap; gap:10px 18px; margin-top:14px;">
+          <span>📍 <span class="i18n" data-fr="Langabou, Préfecture de Blitta" data-en="Langabou, Blitta Prefecture">Langabou, Préfecture de Blitta</span></span>
+          <span>🗓 <span class="i18n" data-fr="Juillet 2026" data-en="July 2026">Juillet 2026</span></span>
+        </div>
+        <div class="project-meta" style="flex-wrap:wrap; gap:10px 18px; margin-top:6px;">
+          <span>🏫 <span class="i18n" data-fr="3 écoles primaires publiques" data-en="3 public primary schools">3 écoles primaires publiques</span></span>
+          <span>🎒 <span class="i18n" data-fr="360 élèves bénéficiaires" data-en="360 beneficiary pupils">360 élèves bénéficiaires</span></span>
+        </div>
+        <div style="margin-top:18px; padding-top:16px; border-top:1px solid var(--line);">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.06em;" class="i18n" data-fr="Financement demandé" data-en="Funding requested">Financement demandé</div>
+          <div style="font-family:'Fraunces',serif; font-weight:700; font-size:1.6rem; color:var(--heading);">USD 7,150</div>
+          <div style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;" class="i18n" data-fr="Proposition soumise à Alwaleed Philanthropies" data-en="Proposal submitted to Alwaleed Philanthropies">Proposition soumise à Alwaleed Philanthropies</div>
+        </div>
+        <a href="#contact" class="btn btn-gold i18n" data-fr="Soutenir ce projet" data-en="Support this project" style="margin-top:20px;">Soutenir ce projet</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- ============ PROGRAMS ============ -->
+<section id="programmes" style="background:var(--paper);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="Nos programmes" data-en="Our programs">Nos programmes</span>
+      <h2 class="i18n" data-fr="Quatre axes d'intervention, un même objectif" data-en="Four areas of action, one goal">Quatre axes d'intervention, un même objectif</h2>
+      <p class="i18n" data-fr="ACIES concentre son action de terrain sur quatre domaines complémentaires, avec une approche communautaire à Lomé et dans les régions du Togo." data-en="ACIES focuses its fieldwork on four complementary areas, with a community-based approach in Lomé and across Togo's regions.">ACIES concentre son action de terrain sur quatre domaines complémentaires, avec une approche communautaire à Lomé et dans les régions du Togo.</p>
+    </div>
+
+    <div class="programs-grid">
+      <div class="program-card reveal">
+        <div class="program-icon">📚</div>
+        <h3 class="i18n" data-fr="Éducation" data-en="Education">Éducation</h3>
+        <p class="i18n" data-fr="Éducation de qualité pour les enfants vulnérables, soutien aux orphelins, kits scolaires et sensibilisation à la scolarisation des filles." data-en="Quality education for vulnerable children, support for orphans, school kits and girls' education awareness.">Éducation de qualité pour les enfants vulnérables, soutien aux orphelins, kits scolaires et sensibilisation à la scolarisation des filles.</p>
+        <div class="tags"><span class="i18n" data-fr="Tchalo & Adétikopé, 2025" data-en="Tchalo & Adétikopé, 2025">Tchalo & Adétikopé, 2025</span></div>
+      </div>
+      <div class="program-card reveal">
+        <div class="program-icon">🤝</div>
+        <h3 class="i18n" data-fr="Aide humanitaire" data-en="Humanitarian relief">Aide humanitaire</h3>
+        <p class="i18n" data-fr="Assistance éducative aux élèves vulnérables et aide d'urgence aux familles en situation de précarité." data-en="Educational assistance for vulnerable pupils and emergency relief for vulnerable households.">Assistance éducative aux élèves vulnérables et aide d'urgence aux familles en situation de précarité.</p>
+        <div class="tags"><span class="i18n" data-fr="Familles vulnérables" data-en="Vulnerable households">Familles vulnérables</span></div>
+      </div>
+      <div class="program-card reveal">
+        <div class="program-icon">💧</div>
+        <h3 class="i18n" data-fr="Eau, hygiène et assainissement" data-en="Water, hygiene & sanitation">Eau, hygiène et assainissement</h3>
+        <p class="i18n" data-fr="Préparation de projets de points d'eau communautaires et promotion de l'accès à l'eau potable." data-en="Preparation of community water-point projects and promotion of access to clean water.">Préparation de projets de points d'eau communautaires et promotion de l'accès à l'eau potable.</p>
+        <div class="tags"><span class="i18n" data-fr="Tchikawa, mai 2024" data-en="Tchikawa, May 2024">Tchikawa, mai 2024</span></div>
+      </div>
+      <div class="program-card reveal">
+        <div class="program-icon">🌱</div>
+        <h3 class="i18n" data-fr="Développement communautaire" data-en="Community development">Développement communautaire</h3>
+        <p class="i18n" data-fr="Formations communautaires sur les activités génératrices de revenus (AGR) pour autonomiser les communautés." data-en="Community training on income-generating activities (IGA) to help communities become self-reliant.">Formations communautaires sur les activités génératrices de revenus (AGR) pour autonomiser les communautés.</p>
+        <div class="tags"><span class="i18n" data-fr="Lassa-Bas, déc. 2024" data-en="Lassa-Bas, Dec. 2024">Lassa-Bas, déc. 2024</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projets">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="Notre impact humanitaire" data-en="Our humanitarian impact">Notre impact humanitaire</span>
+      <h2 class="i18n" data-fr="2024–2026 : nos initiatives sur le terrain" data-en="2024–2026: our initiatives in the field">2024–2026 : nos initiatives sur le terrain</h2>
+      <p class="i18n" data-fr="Sept actions concrètes menées ces dernières années auprès des communautés togolaises." data-en="Seven concrete actions carried out in recent years with Togolese communities.">Sept actions concrètes menées ces dernières années auprès des communautés togolaises.</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-img">
+          <img src="images/water-well-tchikawa.jpg" alt="Projet de point d'eau communautaire à Tchikawa">
+          <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
+        </div>
+        <div class="project-body">
+          <h3 class="i18n" data-fr="Projet de point d'eau communautaire" data-en="Community water project">Projet de point d'eau communautaire</h3>
+          <p class="i18n" data-fr="Préparation d'un projet de point d'eau pour la communauté de Tchikawa." data-en="Preparation of a community water point project in Tchikawa.">Préparation d'un projet de point d'eau pour la communauté de Tchikawa.</p>
+          <div class="project-meta"><span>📍 Tchikawa</span><span>🗓 Mai 2024</span><span>💰 350 000 FCFA</span></div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-img">
+          <img src="images/girls-education-assere.jpg" alt="Campagne de sensibilisation à l'éducation des filles à Asséré">
+          <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
+        </div>
+        <div class="project-body">
+          <h3 class="i18n" data-fr="Campagne pour l'éducation des filles" data-en="Girls' education awareness campaign">Campagne pour l'éducation des filles</h3>
+          <p class="i18n" data-fr="Sensibilisation communautaire à la promotion de l'éducation des filles à Asséré." data-en="Community awareness campaign promoting girls' education in Asséré.">Sensibilisation communautaire à la promotion de l'éducation des filles à Asséré.</p>
+          <div class="project-meta"><span>📍 Asséré</span><span>🗓 Août 2024</span><span>💰 50 000 FCFA</span></div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-img">
+          <img src="images/agr-training-lassabas.jpg" alt="Formation communautaire sur les activités génératrices de revenus à Lassa-Bas">
+          <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
+        </div>
+        <div class="project-body">
+          <h3 class="i18n" data-fr="Formation aux activités génératrices de revenus" data-en="Income-generating activities training">Formation aux activités génératrices de revenus</h3>
+          <p class="i18n" data-fr="Formation communautaire sur les AGR, pour autonomiser les communautés vers un avenir durable." data-en="Community training on income-generating activities, to help communities build a sustainable future.">Formation communautaire sur les AGR, pour autonomiser les communautés vers un avenir durable.</p>
+          <div class="project-meta"><span>📍 Lassa-Bas</span><span>🗓 Déc. 2024</span><span>💰 50 000 FCFA</span></div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-img">
+          <img src="images/school-supplies-prep.jpg" alt="Préparation de fournitures scolaires pour l'école primaire de Tchalo">
+          <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
+        </div>
+        <div class="project-body">
+          <h3 class="i18n" data-fr="Préparation de kits scolaires" data-en="Preparation of school kits">Préparation de kits scolaires</h3>
+          <p class="i18n" data-fr="Préparation de fournitures scolaires pour 150 élèves de l'École Primaire Publique de Tchalo Groupe A." data-en="Preparation of school supplies for 150 pupils of Tchalo Group A Public Primary School.">Préparation de fournitures scolaires pour 150 élèves de l'École Primaire Publique de Tchalo Groupe A.</p>
+          <div class="project-meta"><span>📍 Tchalo</span><span>🗓 Sept. 2025</span><span>💰 1 050 000 FCFA</span></div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-img">
+          <img src="images/school-kits-adetikope.jpg" alt="Distribution de kits scolaires aux élèves d'Adétikopé">
+          <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
+        </div>
+        <div class="project-body">
+          <h3 class="i18n" data-fr="Distribution de kits scolaires" data-en="Distribution of school kits">Distribution de kits scolaires</h3>
+          <p class="i18n" data-fr="Distribution de kits scolaires à 100 élèves du Collège d'Enseignement Général d'Adétikopé, Préfecture d'Agoè-Nyivé." data-en="Distribution of school kits to 100 students of Adétikopé Junior Secondary School, Agoè-Nyivé Prefecture.">Distribution de kits scolaires à 100 élèves du Collège d'Enseignement Général d'Adétikopé, Préfecture d'Agoè-Nyivé.</p>
+          <div class="project-meta"><span>📍 Adétikopé</span><span>🗓 Sept. 2025</span><span>💰 1 125 000 FCFA</span></div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-img">
+          <img src="images/ramadan-distribution-cacaveli.jpg" alt="Distribution de dates pour la rupture du jeûne du Ramadan à Cacavéli">
+          <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
+        </div>
+        <div class="project-body">
+          <h3 class="i18n" data-fr="Distribution de dattes pour le Ramadan" data-en="Ramadan dates distribution">Distribution de dattes pour le Ramadan</h3>
+          <p class="i18n" data-fr="Distribution de dattes pour la rupture du jeûne aux membres vulnérables de la communauté de Cacavéli, Lomé." data-en="Distribution of dates for Ramadan fast-breaking to vulnerable community members in Cacavéli, Lomé.">Distribution de dattes pour la rupture du jeûne aux membres vulnérables de la communauté de Cacavéli, Lomé.</p>
+          <div class="project-meta"><span>📍 Cacavéli, Lomé</span><span>🗓 18 Fév. 2026</span></div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-img">
+          <img src="images/eid-distribution-trokpossime.jpg" alt="Célébration de l'Aïd al-Adha à Trokpossimé">
+          <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
+        </div>
+        <div class="project-body">
+          <h3 class="i18n" data-fr="Célébration de l'Aïd al-Adha (Tabaski)" data-en="Eid al-Adha (Tabaski) celebration">Célébration de l'Aïd al-Adha (Tabaski)</h3>
+          <p class="i18n" data-fr="Le président de l'ACIES aux côtés de l'imam de la mosquée centrale de Trokpossimé et des autorités locales, avec la communauté réunie pour le sermon de l'Aïd." data-en="ACIES' president alongside the Imam of Trokpossimé Central Mosque and local authorities, with the community gathered for the Eid sermon.">Le président de l'ACIES aux côtés de l'imam de la mosquée centrale de Trokpossimé et des autorités locales, avec la communauté réunie pour le sermon de l'Aïd.</p>
+          <div class="project-meta"><span>📍 Trokpossimé, Agoè-Nyivé</span><span>🗓 27 Mai 2026</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- ============ REPORTS ============ -->
+<section id="rapports" style="background:var(--paper);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="Documentation" data-en="Documentation">Documentation</span>
+      <h2 class="i18n" data-fr="Documents officiels" data-en="Official documents">Documents officiels</h2>
+      <p class="i18n" data-fr="Consultez et téléchargez nos documents officiels — la transparence est un engagement, pas un slogan." data-en="Browse and download our official documents — transparency is a commitment, not a slogan.">Consultez et téléchargez nos documents officiels — la transparence est un engagement, pas un slogan.</p>
+    </div>
+    <div class="reports-grid" style="grid-template-columns:repeat(3,1fr); max-width:900px; margin:0 auto;">
+      <div class="report-card reveal">
+        <div class="report-icon">📄</div>
+        <h4 class="i18n" data-fr="Profil institutionnel" data-en="Institutional profile">Profil institutionnel</h4>
+        <div class="year">2026</div>
+        <a href="documents/ACIES_Institutional_Profile.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
+      </div>
+      <div class="report-card reveal">
+        <div class="report-icon">📜</div>
+        <h4 class="i18n" data-fr="Récépissé de déclaration" data-en="Registration receipt">Récépissé de déclaration</h4>
+        <div class="year">N° 0971 · 2023</div>
+        <a href="documents/ACIES_Registration_Certificate.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
+      </div>
+      <div class="report-card reveal">
+        <div class="report-icon">🖼️</div>
+        <h4 class="i18n" data-fr="Annexes photos des activités" data-en="Activity photo annexes">Annexes photos des activités</h4>
+        <div class="year">2024–2026</div>
+        <a href="documents/ACIES_Activity_Photos_Annexes.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section id="galerie" style="background:var(--paper);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="En images" data-en="In pictures">En images</span>
+      <h2 class="i18n" data-fr="Galerie photo & vidéo" data-en="Photo & video gallery">Galerie photo & vidéo</h2>
+    </div>
+    <div class="gallery-filters">
+      <button class="filter-btn active" data-filter="all" onclick="filterGallery('all', this)">Tout / All</button>
+      <button class="filter-btn" data-filter="education" onclick="filterGallery('education', this)">Éducation</button>
+      <button class="filter-btn" data-filter="eau" onclick="filterGallery('eau', this)">Eau & assainissement</button>
+      <button class="filter-btn" data-filter="communaute" onclick="filterGallery('communaute', this)">Développement communautaire</button>
+      <button class="filter-btn" data-filter="religieux" onclick="filterGallery('religieux', this)">Ramadan & Aïd</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-item wide" data-cat="education" onclick="openLightbox(this)"><img src="images/langabou-proposal-cover.jpg" alt="Élèves de Langabou, Préfecture de Blitta, juillet 2026"></div>
+      <div class="gallery-item tall" data-cat="education" onclick="openLightbox(this)"><img src="images/school-kits-night.jpg" alt="Élèves avec leurs kits scolaires ACIES"></div>
+      <div class="gallery-item" data-cat="eau" onclick="openLightbox(this)"><img src="images/water-well-tchikawa.jpg" alt="Préparation d'un point d'eau communautaire à Tchikawa, mai 2024"></div>
+      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="images/girls-education-assere.jpg" alt="Campagne pour l'éducation des filles à Asséré, août 2024"></div>
+      <div class="gallery-item" data-cat="communaute" onclick="openLightbox(this)"><img src="images/agr-training-lassabas.jpg" alt="Formation communautaire aux AGR à Lassa-Bas, décembre 2024"></div>
+      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="images/school-supplies-prep.jpg" alt="Préparation de fournitures scolaires, Tchalo, septembre 2025"></div>
+      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="images/school-kits-adetikope.jpg" alt="Distribution de kits scolaires à Adétikopé, septembre 2025"></div>
+      <div class="gallery-item" data-cat="religieux" onclick="openLightbox(this)"><img src="images/ramadan-distribution-cacaveli.jpg" alt="Distribution de dattes pour le Ramadan, Cacavéli, février 2026"></div>
+      <div class="gallery-item wide" data-cat="religieux" onclick="openLightbox(this)"><img src="images/eid-distribution-trokpossime.jpg" alt="Célébration de l'Aïd al-Adha, Trokpossimé, mai 2026"></div>
+      <div class="gallery-item" data-cat="communaute" onclick="openLightbox(this)"><img src="images/achievements-infographic.jpg" alt="Bilan des activités et réalisations ACIES 2024-2025"></div>
+    </div>
+
+    <div style="margin-top:56px;">
+      <h3 style="text-align:center; font-size:1.1rem; margin-bottom:20px;" class="i18n" data-fr="Vidéos de nos activités" data-en="Videos of our activities">Vidéos de nos activités</h3>
+      <div class="video-grid">
+        <video controls preload="metadata"><source src="videos/acies-video-1.mp4" type="video/mp4"></video>
+        <video controls preload="metadata"><source src="videos/acies-video-2.mp4" type="video/mp4"></video>
+        <video controls preload="metadata"><source src="videos/acies-video-3.mp4" type="video/mp4"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- ============ PARTNERSHIPS ============ -->
+<section id="partenariats">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="Construire ensemble" data-en="Building together">Construire ensemble</span>
+      <h2 class="i18n" data-fr="Devenir partenaire de l'ACIES" data-en="Become a partner of ACIES">Devenir partenaire de l'ACIES</h2>
+      <p class="i18n" data-fr="Nous accueillons toute collaboration avec des organisations humanitaires, des fondations caritatives et des partenaires de développement engagés pour l'éducation et le bien-être des communautés." data-en="We welcome collaboration with humanitarian organizations, charitable foundations and development partners committed to improving education and community well-being.">Nous accueillons toute collaboration avec des organisations humanitaires, des fondations caritatives et des partenaires de développement engagés pour l'éducation et le bien-être des communautés.</p>
+    </div>
+    <div class="partner-audience">
+      <div class="audience-card reveal"><div class="ic">🌍</div><h4 class="i18n" data-fr="Organisations humanitaires" data-en="Humanitarian organizations">Organisations humanitaires</h4></div>
+      <div class="audience-card reveal"><div class="ic">🏛️</div><h4 class="i18n" data-fr="Fondations caritatives" data-en="Charitable foundations">Fondations caritatives</h4></div>
+      <div class="audience-card reveal"><div class="ic">🤝</div><h4 class="i18n" data-fr="Partenaires de développement" data-en="Development partners">Partenaires de développement</h4></div>
+      <div class="audience-card reveal"><div class="ic">🏢</div><h4 class="i18n" data-fr="Administrations publiques" data-en="Public administrations">Administrations publiques</h4></div>
+      <div class="audience-card reveal"><div class="ic">💼</div><h4 class="i18n" data-fr="Entreprises engagées" data-en="Committed businesses">Entreprises engagées</h4></div>
+    </div>
+    <div class="partner-benefits">
+      <div class="benefit-card reveal">
+        <h4 class="i18n" data-fr="Présence de terrain" data-en="Grassroots presence">Présence de terrain</h4>
+        <p class="i18n" data-fr="Forte présence communautaire, capacité de mise en œuvre directe et réseau de bénévoles dédiés." data-en="Strong grassroots presence, direct implementation capacity and a dedicated volunteer network.">Forte présence communautaire, capacité de mise en œuvre directe et réseau de bénévoles dédiés.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <h4 class="i18n" data-fr="Gestion transparente" data-en="Transparent management">Gestion transparente</h4>
+        <p class="i18n" data-fr="Gestion financière transparente et usage responsable des ressources des donateurs." data-en="Transparent financial management and responsible use of donor resources.">Gestion financière transparente et usage responsable des ressources des donateurs.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <h4 class="i18n" data-fr="Redevabilité durable" data-en="Long-term accountability">Redevabilité durable</h4>
+        <p class="i18n" data-fr="Rapports narratifs et financiers réguliers, dans un engagement de partenariat sur le long terme." data-en="Regular narrative and financial reporting, with a commitment to long-term partnerships.">Rapports narratifs et financiers réguliers, dans un engagement de partenariat sur le long terme.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:36px;">
+      <a href="#contact" class="btn btn-gold i18n" data-fr="Devenir partenaire" data-en="Become a partner">Devenir partenaire</a>
+    </div>
+    <div style="margin-top:44px; padding-top:36px; border-top:1px solid var(--line);">
+      <h3 style="font-size:1.05rem; text-align:center; margin-bottom:18px;" class="i18n" data-fr="Pour chaque projet soutenu, l'ACIES fournit" data-en="For every supported project, ACIES provides">Pour chaque projet soutenu, l'ACIES fournit</h3>
+      <div class="logos-row">
+        <span class="logo-chip i18n" data-fr="✓ Rapports narratifs" data-en="✓ Narrative reports">✓ Rapports narratifs</span>
+        <span class="logo-chip i18n" data-fr="✓ Rapports financiers" data-en="✓ Financial reports">✓ Rapports financiers</span>
+        <span class="logo-chip i18n" data-fr="✓ Photos d'activités" data-en="✓ Activity photographs">✓ Photos d'activités</span>
+        <span class="logo-chip i18n" data-fr="✓ Statistiques des bénéficiaires" data-en="✓ Beneficiary statistics">✓ Statistiques des bénéficiaires</span>
+        <span class="logo-chip i18n" data-fr="✓ Suivi & évaluation" data-en="✓ Monitoring & evaluation">✓ Suivi & évaluation</span>
+        <span class="logo-chip i18n" data-fr="✓ Visibilité des donateurs" data-en="✓ Donor visibility">✓ Visibilité des donateurs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DONATE ============ -->
+<section class="donate-section" id="don">
+  <div class="wrap donate-grid">
+    <div class="reveal">
+      <span class="eyebrow i18n" data-fr="Votre soutien compte" data-en="Your support matters">Votre soutien compte</span>
+      <h2 class="i18n" data-fr="Chaque don change une vie" data-en="Every gift changes a life">Chaque don change une vie</h2>
+      <p class="i18n" data-fr="Vos contributions financent directement nos programmes de terrain — de la préparation de points d'eau communautaires à la distribution de kits scolaires." data-en="Your contributions directly fund our field programs — from preparing community water points to distributing school kits.">Vos contributions financent directement nos programmes de terrain — de la préparation de points d'eau communautaires à la distribution de kits scolaires.</p>
+      <ul class="donate-reasons">
+        <li><span class="chk">✓</span><span class="i18n" data-fr="Éducation des enfants vulnérables et kits scolaires" data-en="Education for vulnerable children and school kits">Éducation des enfants vulnérables et kits scolaires</span></li>
+        <li><span class="chk">✓</span><span class="i18n" data-fr="Eau, hygiène et assainissement" data-en="Water, hygiene and sanitation">Eau, hygiène et assainissement</span></li>
+        <li><span class="chk">✓</span><span class="i18n" data-fr="Développement communautaire et aide humanitaire" data-en="Community development and humanitarian relief">Développement communautaire et aide humanitaire</span></li>
+      </ul>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q"><span class="i18n" data-fr="Mon don est-il déductible d'impôt ?" data-en="Is my donation tax-deductible?">Mon don est-il déductible d'impôt ?</span><span class="plus">+</span></div>
+        <div class="faq-a i18n" data-fr="Un reçu officiel est délivré pour chaque don ; les conditions de déductibilité dépendent de votre pays de résidence." data-en="An official receipt is issued for every donation; tax-deduction rules depend on your country of residence.">Un reçu officiel est délivré pour chaque don ; les conditions de déductibilité dépendent de votre pays de résidence.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q"><span class="i18n" data-fr="Comment savoir où va mon argent ?" data-en="How do I know where my money goes?">Comment savoir où va mon argent ?</span><span class="plus">+</span></div>
+        <div class="faq-a i18n" data-fr="Nos rapports financiers annuels détaillent l'utilisation de chaque don par programme." data-en="Our annual financial reports detail how every donation is used, by program.">Nos rapports financiers annuels détaillent l'utilisation de chaque don par programme.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q"><span class="i18n" data-fr="Puis-je faire un don récurrent ?" data-en="Can I set up a recurring donation?">Puis-je faire un don récurrent ?</span><span class="plus">+</span></div>
+        <div class="faq-a i18n" data-fr="Oui, contactez-nous pour organiser un don récurrent adapté à vos préférences." data-en="Yes, contact us to arrange a recurring donation that suits your preferences.">Oui, contactez-nous pour organiser un don récurrent adapté à vos préférences.</div>
+      </div>
+    </div>
+
+    <div class="donate-card reveal">
+      <label class="i18n" data-fr="Faire un don" data-en="Make a donation">Faire un don</label>
+      <p style="font-size:0.92rem; color:#D9E4DC; margin:10px 0 20px;" class="i18n" data-fr="Remplissez ce court formulaire — nous vous répondrons sur WhatsApp avec les modalités et un reçu." data-en="Fill in this short form — we'll reply on WhatsApp with the details and a receipt.">Remplissez ce court formulaire — nous vous répondrons sur WhatsApp avec les modalités et un reçu.</p>
+
+      <form id="donateForm" onsubmit="submitDonateForm(event)">
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:0.8rem; color:#D9E4DC; margin-bottom:6px;" class="i18n" data-fr="Nom complet" data-en="Full name">Nom complet</label>
+          <input type="text" id="donateName" required style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:0.8rem; color:#D9E4DC; margin-bottom:6px;" class="i18n" data-fr="Montant du don (FCFA)" data-en="Donation amount (FCFA)">Montant du don (FCFA)</label>
+          <input type="number" id="donateAmount" min="1" placeholder="ex : 10 000" required style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:0.8rem; color:#D9E4DC; margin-bottom:6px;" class="i18n" data-fr="Mode de paiement souhaité" data-en="Preferred payment method">Mode de paiement souhaité</label>
+          <select id="donatePaymentMethod" required class="donate-select" style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
+            <option value="" disabled selected class="i18n" data-fr="— Choisir —" data-en="— Choose —">— Choisir —</option>
+            <option class="i18n" data-fr="Mobile Money (Flooz)" data-en="Mobile Money (Flooz)">Mobile Money (Flooz)</option>
+            <option class="i18n" data-fr="Mobile Money (T-Money)" data-en="Mobile Money (T-Money)">Mobile Money (T-Money)</option>
+            <option class="i18n" data-fr="Virement bancaire" data-en="Bank transfer">Virement bancaire</option>
+            <option class="i18n" data-fr="Remise en main propre / espèces" data-en="Cash in person">Remise en main propre / espèces</option>
+            <option class="i18n" data-fr="Autre" data-en="Other">Autre</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:0.8rem; color:#D9E4DC; margin-bottom:6px;" class="i18n" data-fr="Type de don" data-en="Donation type">Type de don</label>
+          <select id="donateFrequency" class="donate-select" style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
+            <option class="i18n" data-fr="Don unique" data-en="One-time donation">Don unique</option>
+            <option class="i18n" data-fr="Don récurrent (mensuel)" data-en="Recurring donation (monthly)">Don récurrent (mensuel)</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label style="display:block; font-size:0.8rem; color:#D9E4DC; margin-bottom:6px;" class="i18n" data-fr="E-mail ou téléphone (pour le reçu)" data-en="Email or phone (for the receipt)">E-mail ou téléphone (pour le reçu)</label>
+          <input type="text" id="donateContact" style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
+        </div>
+
+        <button type="submit" class="btn btn-gold i18n" data-fr="Continuer sur WhatsApp" data-en="Continue on WhatsApp" style="width:100%; justify-content:center;">Continuer sur WhatsApp</button>
+      </form>
+
+      <p style="font-size:0.78rem; color:#B8CBBF; margin-top:14px;" class="i18n" data-fr="Reçu officiel délivré pour chaque don" data-en="Official receipt issued for every donation">Reçu officiel délivré pour chaque don</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEWSLETTER ============ -->
+<section class="newsletter" style="padding:44px 0;">
+  <div class="wrap newsletter-inner">
+    <div>
+      <h3 style="font-size:1.05rem;" class="i18n" data-fr="Restez informé de nos actions" data-en="Stay informed about our work">Restez informé de nos actions</h3>
+      <p style="color:var(--ink-soft); font-size:0.9rem;" class="i18n" data-fr="Recevez nos actualités et rapports directement par e-mail." data-en="Receive our news and reports directly by email.">Recevez nos actualités et rapports directement par e-mail.</p>
+    </div>
+    <form onsubmit="event.preventDefault(); this.reset(); alert(currentLang==='fr' ? 'Merci pour votre inscription !' : 'Thank you for subscribing!');">
+      <input type="email" required placeholder="votre@email.com" class="i18n-ph" data-fr="votre@email.com" data-en="your@email.com">
+      <button class="btn btn-gold i18n" data-fr="S'inscrire" data-en="Subscribe" type="submit">S'inscrire</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" style="background:var(--paper);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow i18n" data-fr="Parlons-en" data-en="Let's talk">Parlons-en</span>
+      <h2 class="i18n" data-fr="Contactez l'ACIES" data-en="Contact ACIES">Contactez l'ACIES</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-info-item">
+          <div class="ic">📍</div>
+          <div>
+            <h4 class="i18n" data-fr="Siège social" data-en="Head office">Siège social</h4>
+            <p class="i18n" data-fr="Cacavéli, Préfecture d'Agoè-Nyivé, 05 BP 91, Lomé, Togo" data-en="Cacavéli, Agoè-Nyivé Prefecture, 05 BP 91, Lomé, Togo">Cacavéli, Préfecture d'Agoè-Nyivé, 05 BP 91, Lomé, Togo</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ic">✉️</div>
+          <div>
+            <h4 class="i18n" data-fr="E-mail" data-en="Email">E-mail</h4>
+            <p><a href="mailto:aciestogo@gmail.com">aciestogo@gmail.com</a></p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ic">💬</div>
+          <div>
+            <h4>WhatsApp</h4>
+            <p><a href="https://wa.me/22890025112" target="_blank">+228 90 02 51 12</a></p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ic">👤</div>
+          <div>
+            <h4 class="i18n" data-fr="Président" data-en="President">Président</h4>
+            <p>MAMADOU Assoumanou</p>
+          </div>
+        </div>
+        <div class="map-embed">
+          <iframe src="https://maps.google.com/maps?q=Cacav%C3%A9li%2C%20Lom%C3%A9%2C%20Togo&t=&z=14&ie=UTF8&iwloc=&output=embed" width="100%" height="220" style="border:0;" loading="lazy" title="Carte Cacavéli, Lomé, Togo"></iframe>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="form-card">
+          <form id="contactForm" onsubmit="submitContactForm(event)">
+            <div class="form-row">
+              <div>
+                <label class="i18n" data-fr="Nom complet" data-en="Full name">Nom complet</label>
+                <input type="text" id="contactName" required>
+              </div>
+              <div>
+                <label class="i18n" data-fr="E-mail" data-en="Email">E-mail</label>
+                <input type="email" id="contactEmail" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="i18n" data-fr="Téléphone" data-en="Phone">Téléphone</label>
+                <input type="tel" id="contactPhone">
+              </div>
+              <div>
+                <label class="i18n" data-fr="Je suis…" data-en="I am…">Je suis…</label>
+                <select id="contactRole">
+                  <option class="i18n" data-fr="Donateur" data-en="Donor">Donateur</option>
+                  <option class="i18n" data-fr="Partenaire potentiel" data-en="Potential partner">Partenaire potentiel</option>
+                  <option class="i18n" data-fr="Bénévole" data-en="Volunteer">Bénévole</option>
+                  <option class="i18n" data-fr="Journaliste" data-en="Journalist">Journaliste</option>
+                  <option class="i18n" data-fr="Autre" data-en="Other">Autre</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div>
+                <label class="i18n" data-fr="Message" data-en="Message">Message</label>
+                <textarea id="contactMessage" required></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gold i18n" data-fr="Continuer sur WhatsApp" data-en="Continue on WhatsApp" style="width:100%; justify-content:center;">Continuer sur WhatsApp</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <div class="brand" style="margin-bottom:14px;">
+        <div class="brand-mark">A</div>
+        <div>
+          <div class="brand-name">ACIES</div>
+          <div class="brand-sub" style="color:#9FB6A9;">Lomé, Togo</div>
+        </div>
+      </div>
+      <p style="font-size:0.88rem; max-width:32ch;" class="i18n" data-fr="Ensemble, nous transformons la compassion en action durable." data-en="Together, we transform compassion into sustainable action.">Ensemble, nous transformons la compassion en action durable.</p>
+      <a href="#don" class="btn btn-gold" style="margin-top:18px;" data-fr="Faire un don" data-en="Donate">Faire un don</a>
+    </div>
+    <div>
+      <h4 class="i18n" data-fr="Liens rapides" data-en="Quick links">Liens rapides</h4>
+      <ul>
+        <li><a href="#apropos" class="i18n" data-fr="À propos" data-en="About">À propos</a></li>
+        <li><a href="#programmes" class="i18n" data-fr="Programmes" data-en="Programs">Programmes</a></li>
+        <li><a href="#projets" class="i18n" data-fr="Projets" data-en="Projects">Projets</a></li>
+        <li><a href="#rapports" class="i18n" data-fr="Documents" data-en="Documents">Documents</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="i18n" data-fr="Coordonnées" data-en="Contact">Coordonnées</h4>
+      <ul>
+        <li class="i18n" data-fr="Cacavéli, Lomé, Togo" data-en="Cacavéli, Lomé, Togo">Cacavéli, Lomé, Togo</li>
+        <li><a href="mailto:aciestogo@gmail.com">aciestogo@gmail.com</a></li>
+        <li><a href="https://wa.me/22890025112" target="_blank">+228 90 02 51 12</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="i18n" data-fr="Légal" data-en="Legal">Légal</h4>
+      <ul>
+        <li><a href="#" class="i18n" data-fr="Politique de confidentialité" data-en="Privacy policy">Politique de confidentialité</a></li>
+        <li><a href="#" class="i18n" data-fr="Conditions d'utilisation" data-en="Terms of use">Conditions d'utilisation</a></li>
+        <li><a href="#" class="i18n" data-fr="Gestion des cookies" data-en="Cookie settings">Gestion des cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span class="i18n" data-fr="© 2026 ACIES — Association pour la Charité, l'Instruction, l'Éducation et le Social." data-en="© 2026 ACIES — Association for Charity, Instruction, Education and Social Welfare.">© 2026 ACIES — Association pour la Charité, l'Instruction, l'Éducation et le Social.</span>
+    <div class="footer-legal">
+      <a href="#" class="i18n" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+      <a href="#" class="i18n" data-fr="Conditions" data-en="Terms">Conditions</a>
+      <a href="#" class="i18n" data-fr="Cookies" data-en="Cookies">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner" id="cookieBanner">
+  <p class="i18n" data-fr="Nous utilisons des cookies pour améliorer votre expérience et mesurer notre audience." data-en="We use cookies to improve your experience and measure our audience.">Nous utilisons des cookies pour améliorer votre expérience et mesurer notre audience.</p>
+  <div class="cookie-actions">
+    <button class="btn btn-outline i18n" data-fr="Refuser" data-en="Decline" onclick="dismissCookie()">Refuser</button>
+    <button class="btn btn-gold i18n" data-fr="Accepter" data-en="Accept" onclick="dismissCookie()">Accepter</button>
+  </div>
+</div>
+
+<script>
+  // ---------- Theme toggle ----------
+  function updateThemeIcons(theme){
+    const icon = theme === 'dark' ? '☀️' : '🌙';
+    const btn1 = document.getElementById('themeToggle');
+    const btn2 = document.getElementById('themeToggleMobile');
+    if(btn1) btn1.textContent = icon;
+    if(btn2) btn2.textContent = icon;
+  }
+  function toggleTheme(){
+    const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('acies-theme', next);
+    updateThemeIcons(next);
+  }
+  updateThemeIcons(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
+  // ---------- Language toggle ----------
+  let currentLang = 'fr';
+  function setLang(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.getElementById('lang-fr').classList.toggle('active', lang==='fr');
+    document.getElementById('lang-en').classList.toggle('active', lang==='en');
+    document.querySelectorAll('.i18n').forEach(el=>{
+      const val = el.getAttribute('data-'+lang);
+      if(val !== null) el.textContent = val;
+    });
+    document.querySelectorAll('.i18n-ph').forEach(el=>{
+      const val = el.getAttribute('data-'+lang);
+      if(val !== null) el.setAttribute('placeholder', val);
+    });
+  }
+
+  // ---------- Mobile drawer ----------
+  function toggleDrawer(open){
+    document.getElementById('drawer').classList.toggle('open', open);
+    document.getElementById('overlay').classList.toggle('show', open);
+  }
+
+  // ---------- Reveal on scroll ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target);} });
+  }, {threshold:0.12});
+  revealEls.forEach(el=>io.observe(el));
+
+  // ---------- Counters ----------
+  const counters = document.querySelectorAll('[data-count]');
+  const counterIO = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        let cur = 0;
+        const step = Math.max(1, Math.round(target/60));
+        const tick = ()=>{
+          cur += step;
+          if(cur >= target){ el.textContent = target.toLocaleString('fr-FR'); return; }
+          el.textContent = cur.toLocaleString('fr-FR');
+          requestAnimationFrame(tick);
+        };
+        tick();
+        counterIO.unobserve(el);
+      }
+    });
+  }, {threshold:0.4});
+  counters.forEach(el=>counterIO.observe(el));
+
+  // ---------- Gallery filter ----------
+  function filterGallery(cat, btn){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.gallery-item').forEach(item=>{
+      item.style.display = (cat==='all' || item.getAttribute('data-cat')===cat) ? '' : 'none';
+    });
+  }
+
+  // ---------- Lightbox ----------
+  function openLightbox(el){
+    const src = el.querySelector('img').src;
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); }
+  document.getElementById('lightbox').addEventListener('click', (e)=>{ if(e.target.id==='lightbox') closeLightbox(); });
+
+  // ---------- Donation amount ----------
+  function selectAmount(btn){
+    btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ---------- WhatsApp redirect: Donation form ----------
+  const WHATSAPP_NUMBER = '22890025112';
+
+  function submitDonateForm(e){
+    e.preventDefault();
+    const form = e.target;
+    const name = document.getElementById('donateName').value.trim();
+    const amount = document.getElementById('donateAmount').value.trim();
+    const method = document.getElementById('donatePaymentMethod').value.trim();
+    const frequency = document.getElementById('donateFrequency').value.trim();
+    const contact = document.getElementById('donateContact').value.trim();
+
+    let message;
+    if(currentLang === 'fr'){
+      message = `Bonjour ACIES, je souhaite faire un don.\n\n`
+        + `Nom : ${name}\n`
+        + `Montant : ${amount} FCFA\n`
+        + `Mode de paiement souhaité : ${method}\n`
+        + `Type de don : ${frequency}`
+        + (contact ? `\nContact (e-mail/téléphone) : ${contact}` : '');
+    } else {
+      message = `Hello ACIES, I would like to make a donation.\n\n`
+        + `Name: ${name}\n`
+        + `Amount: ${amount} FCFA\n`
+        + `Preferred payment method: ${method}\n`
+        + `Donation type: ${frequency}`
+        + (contact ? `\nContact (email/phone): ${contact}` : '');
+    }
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+    form.reset();
+  }
+
+  // ---------- WhatsApp redirect: Contact form ----------
+  function submitContactForm(e){
+    e.preventDefault();
+    const form = e.target;
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    const role = document.getElementById('contactRole').value.trim();
+    const msgText = document.getElementById('contactMessage').value.trim();
+
+    let message;
+    if(currentLang === 'fr'){
+      message = `Bonjour ACIES,\n\n`
+        + `Nom : ${name}\n`
+        + `E-mail : ${email}`
+        + (phone ? `\nTéléphone : ${phone}` : '')
+        + `\nJe suis : ${role}\n\n`
+        + `Message : ${msgText}`;
+    } else {
+      message = `Hello ACIES,\n\n`
+        + `Name: ${name}\n`
+        + `Email: ${email}`
+        + (phone ? `\nPhone: ${phone}` : '')
+        + `\nI am: ${role}\n\n`
+        + `Message: ${msgText}`;
+    }
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+    form.reset();
+  }
+
+  // ---------- Cookie banner ----------
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>{ document.getElementById('cookieBanner').classList.add('show'); }, 1200);
+  });
+  function dismissCookie(){ document.getElementById('cookieBanner').classList.remove('show'); }
+</script>
+
+</body>
+</html>
