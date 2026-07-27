@@ -3,14 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>
-  // Apply saved / system theme before first paint to avoid a flash of the wrong theme
-  (function(){
-    var saved = localStorage.getItem('acies-theme');
-    var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-  })();
-</script>
 <title>ACIES — Association pour la Charité, l'Instruction, l'Éducation et le Social</title>
 <meta name="description" content="ACIES — Association pour la Charité, l'Instruction, l'Éducation et le Social. Organisation humanitaire enregistrée, basée à Lomé, Togo. Éducation, aide humanitaire, eau-hygiène-assainissement et développement communautaire.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,56 +23,11 @@
     --line:#E4E1D6;
     --radius:14px;
     --shadow: 0 12px 30px -14px rgba(15,60,45,0.25);
-    --heading:#0A3F34;
-    --header-bg:rgba(251,250,246,0.92);
-    --soft-bg:#F1F6F2;
-    --soft-bg-2:#EEF5F0;
-    --soft-tag-bg:#F5F1E4;
-    --soft-highlight-bg:#FBF8EE;
-    --input-bg:#FEFEFC;
-    --track-bg:#EDEAE0;
-    --surface-hover:#FFFFFF;
     --stripe: repeating-linear-gradient(90deg,
         var(--forest) 0 26px,
         var(--gold) 26px 40px,
         var(--indigo) 40px 66px,
         var(--bg) 66px 72px);
-  }
-
-  /* ---------- DARK THEME ---------- */
-  [data-theme="dark"]{
-    --bg:#0E1613;
-    --paper:#182019;
-    --ink:#ECEAE1;
-    --ink-soft:#A9B5AC;
-    --line:#2C362F;
-    --heading:#F1EDE0;
-    --header-bg:rgba(14,22,19,0.86);
-    --soft-bg:#1C2620;
-    --soft-bg-2:#1B2621;
-    --soft-tag-bg:#2A2417;
-    --soft-highlight-bg:#241F14;
-    --input-bg:#1B231D;
-    --track-bg:#2A342C;
-    --surface-hover:#202B23;
-    --forest:#2FAE84;
-    --emerald:#2FAE84;
-    --indigo-light:#5C86C6;
-    --gold:#DDA934;
-    --gold-light:#EFC868;
-    --shadow: 0 12px 30px -14px rgba(0,0,0,0.55);
-  }
-  [data-theme="dark"] .hero-badge{background:rgba(24,32,25,0.94);}
-  [data-theme="dark"] .status-tag{background:rgba(24,32,25,0.9);}
-  [data-theme="dark"] .lightbox-close{color:#fff;}
-  [data-theme="dark"] .value-pill b{color:var(--gold-light);}
-  [data-theme="dark"] .board-photo{border-color:var(--paper);}
-  [data-theme="dark"] .brand-mark{box-shadow:0 0 0 1px rgba(255,255,255,0.06);}
-
-  body, header, .about-card, .program-card, .project-card, .report-card, .form-card,
-  .audience-card, .value-pill, .filter-btn, .cookie-banner, .mobile-drawer,
-  input, textarea, select, .drawer-overlay, .lang-toggle, .theme-toggle{
-    transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -93,7 +40,7 @@
   }
   img{max-width:100%; display:block;}
   a{color:inherit; text-decoration:none;}
-  h1,h2,h3,h4{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; color:var(--heading);}
+  h1,h2,h3,h4{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; color:var(--forest-deep);}
   .eyebrow{
     font-family:'IBM Plex Mono', monospace;
     font-size:0.72rem;
@@ -120,16 +67,15 @@
   /* ---------- HEADER ---------- */
   header{
     position:sticky; top:0; z-index:100;
-    background:var(--header-bg);
+    background:rgba(251,250,246,0.92);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
   }
   .nav{
     display:flex; align-items:center; justify-content:space-between;
     padding:16px 28px; max-width:1180px; margin:0 auto;
-    gap:12px;
   }
-  .brand{display:flex; align-items:center; gap:12px; min-width:0;}
+  .brand{display:flex; align-items:center; gap:12px;}
   .brand-mark{
     width:44px; height:44px; border-radius:10px;
     background:conic-gradient(from 220deg, var(--forest), var(--indigo), var(--gold), var(--forest));
@@ -137,15 +83,15 @@
     color:#fff; font-family:'Fraunces',serif; font-weight:700; font-size:1.1rem;
     flex-shrink:0;
   }
-  .brand-name{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; color:var(--heading); line-height:1.1;}
-  .brand-sub{font-size:0.68rem; color:var(--ink-soft); letter-spacing:0.03em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .brand-name{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; color:var(--forest-deep); line-height:1.1;}
+  .brand-sub{font-size:0.68rem; color:var(--ink-soft); letter-spacing:0.03em;}
   nav.links{display:flex; gap:26px; align-items:center;}
   nav.links a{
     font-size:0.92rem; font-weight:500; color:var(--ink-soft);
     position:relative; padding:4px 0;
   }
   nav.links a:hover{color:var(--forest);}
-  .nav-actions{display:flex; gap:12px; align-items:center; flex-shrink:0;}
+  .nav-actions{display:flex; gap:12px; align-items:center;}
   .lang-toggle{
     display:flex; border:1px solid var(--line); border-radius:20px; overflow:hidden;
     font-family:'IBM Plex Mono', monospace; font-size:0.72rem;
@@ -155,18 +101,6 @@
     color:var(--ink-soft); font-family:inherit; font-size:inherit;
   }
   .lang-toggle button.active{background:var(--forest); color:#fff;}
-  .theme-toggle{
-    display:flex; align-items:center; justify-content:center;
-    width:38px; height:38px; border-radius:50%;
-    border:1px solid var(--line); background:var(--paper);
-    cursor:pointer; font-size:1rem; flex-shrink:0;
-  }
-  .theme-toggle:hover{border-color:var(--forest);}
-  .drawer-theme{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:12px 0; border-bottom:1px solid var(--line);
-  }
-  .drawer-theme span{font-weight:500; color:var(--ink); font-size:0.95rem;}
   .btn{
     display:inline-flex; align-items:center; gap:8px;
     padding:11px 22px; border-radius:30px; font-weight:600; font-size:0.9rem;
@@ -178,7 +112,7 @@
   .btn-outline{border-color:var(--forest); color:var(--forest); background:transparent;}
   .btn-outline:hover{background:var(--forest); color:#fff;}
   .btn-ghost{color:var(--indigo); border-color:var(--indigo);}
-  .menu-toggle{display:none; background:none; border:none; font-size:1.6rem; cursor:pointer; color:var(--heading);}
+  .menu-toggle{display:none; background:none; border:none; font-size:1.6rem; cursor:pointer; color:var(--forest-deep);}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -244,7 +178,7 @@
   .about-card p{color:var(--ink-soft); font-size:0.95rem;}
   .values-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
   .value-pill{
-    background:var(--soft-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; font-size:0.9rem;
+    background:#F1F6F2; border:1px solid var(--line); border-radius:10px; padding:14px 16px; font-size:0.9rem;
   }
   .value-pill b{display:block; color:var(--forest); font-family:'Fraunces',serif; font-size:0.98rem; margin-bottom:2px;}
   .board-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:26px;}
@@ -265,13 +199,13 @@
   .program-card:hover{transform:translateY(-5px); box-shadow:var(--shadow);}
   .program-icon{
     width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center;
-    font-size:1.35rem; margin-bottom:16px; background:var(--soft-bg-2); color:var(--forest);
+    font-size:1.35rem; margin-bottom:16px; background:#EEF5F0; color:var(--forest);
   }
   .program-card h3{font-size:1.02rem; margin-bottom:8px;}
   .program-card p{font-size:0.88rem; color:var(--ink-soft); margin-bottom:14px;}
   .program-card .tags{display:flex; flex-wrap:wrap; gap:6px;}
   .program-card .tags span{
-    font-size:0.68rem; font-family:'IBM Plex Mono',monospace; background:var(--soft-tag-bg); color:var(--gold); padding:3px 8px; border-radius:6px;
+    font-size:0.68rem; font-family:'IBM Plex Mono',monospace; background:#F5F1E4; color:var(--gold); padding:3px 8px; border-radius:6px;
   }
 
   /* ---------- PROJECTS ---------- */
@@ -289,20 +223,19 @@
   .project-body h3{font-size:1.05rem; margin-bottom:8px;}
   .project-body p{font-size:0.88rem; color:var(--ink-soft); margin-bottom:14px;}
   .project-meta{display:flex; justify-content:space-between; font-size:0.76rem; color:var(--ink-soft); margin-bottom:10px; font-family:'IBM Plex Mono',monospace;}
-  .progress-track{height:8px; background:var(--track-bg); border-radius:6px; overflow:hidden; margin-bottom:8px;}
+  .progress-track{height:8px; background:#EDEAE0; border-radius:6px; overflow:hidden; margin-bottom:8px;}
   .progress-fill{height:100%; background:linear-gradient(90deg, var(--forest), var(--emerald));}
   .progress-label{display:flex; justify-content:space-between; font-size:0.75rem; color:var(--ink-soft);}
 
   /* ---------- REPORTS ---------- */
   .reports-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:16px;}
-  .reports-grid.reports-grid--compact{grid-template-columns:repeat(3,1fr); max-width:900px; margin:0 auto;}
   .report-card{
     background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:22px 18px; text-align:center;
     transition:border-color .15s ease;
   }
   .report-card:hover{border-color:var(--forest);}
   .report-icon{font-size:1.6rem; margin-bottom:10px;}
-  .report-card h4{font-size:0.86rem; margin-bottom:4px; color:var(--heading);}
+  .report-card h4{font-size:0.86rem; margin-bottom:4px; color:var(--forest-deep);}
   .report-card .year{font-size:0.72rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; margin-bottom:12px;}
   .report-dl{font-size:0.78rem; color:var(--indigo); font-weight:600; display:inline-flex; align-items:center; gap:6px;}
 
@@ -348,7 +281,7 @@
   .audience-card .ic{font-size:1.6rem; margin-bottom:8px;}
   .audience-card h4{font-size:0.9rem;}
   .partner-benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
-  .benefit-card{padding:22px; border-left:3px solid var(--gold); background:var(--soft-highlight-bg); border-radius:8px;}
+  .benefit-card{padding:22px; border-left:3px solid var(--gold); background:#FBF8EE; border-radius:8px;}
   .benefit-card h4{font-size:0.98rem; margin-bottom:6px;}
   .benefit-card p{font-size:0.86rem; color:var(--ink-soft);}
   .logos-row{
@@ -384,24 +317,22 @@
     font-family:'IBM Plex Mono',monospace; cursor:pointer; font-size:0.88rem;
   }
   .amount-row button.active, .amount-row button:hover{background:var(--gold); color:#2b1e00; border-color:var(--gold);}
-  .donate-select{color-scheme: dark;}
-  .donate-select option{color:#16201C; background:#fff;}
   .method-list{display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 24px;}
   .method-list span{
     font-size:0.78rem; background:rgba(255,255,255,0.1); padding:7px 12px; border-radius:20px; color:#EFF3F0;
   }
   .faq-item{border-bottom:1px solid rgba(255,255,255,0.15); padding:16px 0;}
-  .faq-q{display:flex; justify-content:space-between; cursor:pointer; font-weight:600; font-size:0.95rem; color:#fff; gap:12px;}
+  .faq-q{display:flex; justify-content:space-between; cursor:pointer; font-weight:600; font-size:0.95rem; color:#fff;}
   .faq-a{max-height:0; overflow:hidden; transition:max-height .25s ease; font-size:0.88rem; color:#CBD9CF;}
   .faq-item.open .faq-a{max-height:220px; margin-top:10px;}
   .faq-item.open .faq-q .plus{transform:rotate(45deg);}
-  .faq-q .plus{transition:transform .2s ease; font-size:1.2rem; color:var(--gold-light); flex-shrink:0;}
+  .faq-q .plus{transition:transform .2s ease; font-size:1.2rem; color:var(--gold-light);}
 
   /* ---------- CONTACT ---------- */
   .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px;}
   .contact-info-item{display:flex; gap:14px; margin-bottom:24px;}
   .contact-info-item .ic{
-    width:42px; height:42px; border-radius:10px; background:var(--soft-bg-2); color:var(--forest);
+    width:42px; height:42px; border-radius:10px; background:#EEF5F0; color:var(--forest);
     display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.1rem;
   }
   .contact-info-item h4{font-size:0.92rem; margin-bottom:2px;}
@@ -413,20 +344,19 @@
   }
   .social-row a:hover{background:var(--forest); color:#fff;}
   .map-embed{border-radius:12px; overflow:hidden; margin-top:22px; border:1px solid var(--line);}
-  .map-embed iframe{width:100%; display:block;}
   .form-card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:30px; box-shadow:var(--shadow);}
   .form-row{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
   .form-row.full{grid-template-columns:1fr;}
   label{font-size:0.8rem; color:var(--ink-soft); display:block; margin-bottom:6px; font-weight:500;}
   input, textarea, select{
     width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:8px; font-family:inherit; font-size:0.92rem;
-    background:var(--input-bg); color:var(--ink);
+    background:#FEFEFC;
   }
   input:focus, textarea:focus, select:focus{outline:2px solid var(--forest); outline-offset:1px; border-color:var(--forest);}
   textarea{resize:vertical; min-height:110px;}
 
   /* ---------- NEWSLETTER ---------- */
-  .newsletter{background:var(--soft-bg); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .newsletter{background:#F1F6F2; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .newsletter-inner{display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap;}
   .newsletter form{display:flex; gap:10px; flex:1; max-width:440px; min-width:280px;}
   .newsletter input{flex:1;}
@@ -447,7 +377,7 @@
   .footer-legal{display:flex; gap:18px; flex-wrap:wrap;}
   .cookie-banner{
     position:fixed; bottom:16px; left:16px; right:16px; max-width:520px; margin:0 auto;
-    background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow);
+    background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow);
     z-index:250; display:none; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
   }
   .cookie-banner.show{display:flex;}
@@ -466,58 +396,38 @@
     .projects-grid{grid-template-columns:repeat(2,1fr);}
     .news-grid{grid-template-columns:1fr 1fr;}
     .news-card.feature{grid-column:span 2; grid-row:auto;}
-    .reports-grid, .reports-grid.reports-grid--compact{grid-template-columns:repeat(3,1fr);}
+    .reports-grid{grid-template-columns:repeat(3,1fr);}
     .impact-grid{grid-template-columns:repeat(3,1fr);}
     .board-grid{grid-template-columns:repeat(2,1fr);}
     .partner-audience{grid-template-columns:repeat(3,1fr);}
     .partner-benefits{grid-template-columns:1fr 1fr;}
-    .wrap{padding:0 22px;}
   }
   @media (max-width:760px){
     nav.links, .nav-actions .btn-outline{display:none;}
     .menu-toggle{display:block;}
     .lang-toggle{display:flex;}
     section{padding:64px 0;}
-    .programs-grid, .projects-grid, .news-grid, .reports-grid, .reports-grid.reports-grid--compact,
-    .impact-grid, .board-grid, .partner-audience, .partner-benefits{grid-template-columns:1fr 1fr;}
+    .programs-grid, .projects-grid, .news-grid, .reports-grid, .impact-grid, .board-grid, .partner-audience, .partner-benefits{grid-template-columns:1fr 1fr;}
     .news-card.feature{grid-column:span 2;}
     .gallery-grid{grid-template-columns:repeat(2,1fr);}
     .video-grid{grid-template-columns:1fr 1fr;}
     .amount-row{grid-template-columns:repeat(2,1fr);}
     .form-row{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr 1fr;}
-    .hero{padding:64px 0 48px;}
-    .hero-ctas{flex-direction:column;}
-    .hero-ctas .btn{width:100%; justify-content:center;}
-    .stripe-divider{background-size:48px 100%;}
-    #projet-en-cours .project-card{grid-template-columns:1fr !important;}
-    #projet-en-cours .project-img{height:260px;}
   }
   @media (max-width:520px){
-    .wrap{padding:0 18px;}
     .impact-grid{grid-template-columns:repeat(2,1fr);}
-    .programs-grid, .projects-grid, .news-grid, .reports-grid, .reports-grid.reports-grid--compact,
-    .board-grid, .partner-audience, .partner-benefits, .gallery-grid, .video-grid{grid-template-columns:1fr;}
+    .programs-grid, .projects-grid, .news-grid, .reports-grid, .board-grid, .partner-audience, .partner-benefits, .gallery-grid, .video-grid{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
-    .values-list{grid-template-columns:1fr;}
-    .nav{padding:12px 18px;}
-    .brand-sub{max-width:150px;}
-    .board-card[style]{flex-direction:column; text-align:center !important;}
-    .video-grid video{aspect-ratio:16/10;}
-    .logos-row{gap:12px; justify-content:flex-start;}
-    .cookie-banner{left:12px; right:12px; bottom:12px; padding:16px;}
-    .lightbox{padding:16px;}
   }
-  @media (max-width:400px){
-    .brand-sub{display:none;}
-    .nav-actions{gap:8px;}
-    .theme-toggle{width:34px; height:34px;}
-    .btn{padding:10px 16px; font-size:0.85rem;}
+  @media (max-width:760px){
+    #projet-en-cours .project-card{grid-template-columns:1fr !important;}
+    #projet-en-cours .project-img{height:260px;}
   }
 
   /* mobile drawer */
   .mobile-drawer{
-    position:fixed; top:0; right:-320px; width:290px; max-width:85vw; height:100%; background:var(--paper); z-index:200;
+    position:fixed; top:0; right:-320px; width:290px; height:100%; background:#fff; z-index:200;
     box-shadow:-8px 0 30px rgba(0,0,0,0.15); transition:right .25s ease; padding:28px 24px; overflow-y:auto;
   }
   .mobile-drawer.open{right:0;}
@@ -532,7 +442,7 @@
 <header>
   <div class="nav">
     <div class="brand">
-      <div class="brand-mark"><img src="logo-acies.png" alt="Logo ACIES" style="width:100%;height:100%;object-fit:cover;border-radius:10px;"></div>
+      <div class="brand-mark"><img src="images/logo-acies.png" alt="Logo ACIES" style="width:100%;height:100%;object-fit:cover;border-radius:10px;"></div>
       <div>
         <div class="brand-name">ACIES</div>
         <div class="brand-sub i18n" data-fr="Charité · Instruction · Éducation · Social" data-en="Charity · Instruction · Education · Social">Charité · Instruction · Éducation · Social</div>
@@ -553,7 +463,6 @@
         <button id="lang-fr" class="active" onclick="setLang('fr')">FR</button>
         <button id="lang-en" onclick="setLang('en')">EN</button>
       </div>
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Basculer le thème clair/sombre">🌙</button>
       <a href="#don" class="btn btn-outline i18n" data-fr="Devenir bénévole" data-en="Volunteer" style="display:none">Devenir bénévole</a>
       <a href="#don" class="btn btn-gold i18n" data-fr="Faire un don" data-en="Donate">Faire un don</a>
       <button class="menu-toggle" onclick="toggleDrawer(true)" aria-label="Menu">☰</button>
@@ -563,10 +472,6 @@
 
 <div class="drawer-overlay" id="overlay" onclick="toggleDrawer(false)"></div>
 <div class="mobile-drawer" id="drawer">
-  <div class="drawer-theme">
-    <span class="i18n" data-fr="Thème sombre" data-en="Dark theme">Thème sombre</span>
-    <button class="theme-toggle" id="themeToggleMobile" onclick="toggleTheme()" aria-label="Basculer le thème clair/sombre">🌙</button>
-  </div>
   <a href="#apropos" onclick="toggleDrawer(false)" class="i18n" data-fr="À propos" data-en="About">À propos</a>
   <a href="#projet-en-cours" onclick="toggleDrawer(false)" class="i18n" data-fr="Langabou" data-en="Langabou">Langabou</a>
   <a href="#programmes" onclick="toggleDrawer(false)" class="i18n" data-fr="Programmes" data-en="Programs">Programmes</a>
@@ -593,7 +498,7 @@
       </div>
     </div>
     <div class="hero-media reveal show">
-      <img src="school-kits-night.jpg" alt="Élèves togolais avec leurs kits scolaires ACIES">
+      <img src="images/school-kits-night.jpg" alt="Élèves togolais avec leurs kits scolaires ACIES">
       <div class="hero-badge">
         <div class="num">2022</div>
         <div class="lbl i18n" data-fr="année de fondation à Lomé" data-en="founded in Lomé">année de fondation à Lomé</div>
@@ -701,7 +606,7 @@
     </div>
     <div class="project-card reveal" style="display:grid; grid-template-columns:1.1fr 1fr; gap:0; overflow:hidden; max-width:960px; margin:0 auto;">
       <div class="project-img" style="height:auto;">
-        <img src="langabou-proposal-cover.jpg" alt="Élèves de Langabou, Préfecture de Blitta, Togo" style="height:100%; object-fit:cover;">
+        <img src="images/langabou-proposal-cover.jpg" alt="Élèves de Langabou, Préfecture de Blitta, Togo" style="height:100%; object-fit:cover;">
         <span class="status-tag i18n" data-fr="Recherche de financement" data-en="Seeking funding" style="background:var(--gold);">Recherche de financement</span>
       </div>
       <div class="project-body" style="padding:28px;">
@@ -717,7 +622,7 @@
         </div>
         <div style="margin-top:18px; padding-top:16px; border-top:1px solid var(--line);">
           <div style="font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.06em;" class="i18n" data-fr="Financement demandé" data-en="Funding requested">Financement demandé</div>
-          <div style="font-family:'Fraunces',serif; font-weight:700; font-size:1.6rem; color:var(--heading);">USD 7,150</div>
+          <div style="font-family:'Fraunces',serif; font-weight:700; font-size:1.6rem; color:var(--forest-deep);">USD 7,150</div>
           <div style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;" class="i18n" data-fr="Proposition soumise à Alwaleed Philanthropies" data-en="Proposal submitted to Alwaleed Philanthropies">Proposition soumise à Alwaleed Philanthropies</div>
         </div>
         <a href="#contact" class="btn btn-gold i18n" data-fr="Soutenir ce projet" data-en="Support this project" style="margin-top:20px;">Soutenir ce projet</a>
@@ -777,7 +682,7 @@
     <div class="projects-grid">
       <div class="project-card reveal">
         <div class="project-img">
-          <img src="water-well-tchikawa.jpg" alt="Projet de point d'eau communautaire à Tchikawa">
+          <img src="images/water-well-tchikawa.jpg" alt="Projet de point d'eau communautaire à Tchikawa">
           <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
         </div>
         <div class="project-body">
@@ -788,7 +693,7 @@
       </div>
       <div class="project-card reveal">
         <div class="project-img">
-          <img src="girls-education-assere.jpg" alt="Campagne de sensibilisation à l'éducation des filles à Asséré">
+          <img src="images/girls-education-assere.jpg" alt="Campagne de sensibilisation à l'éducation des filles à Asséré">
           <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
         </div>
         <div class="project-body">
@@ -799,7 +704,7 @@
       </div>
       <div class="project-card reveal">
         <div class="project-img">
-          <img src="agr-training-lassabas.jpg" alt="Formation communautaire sur les activités génératrices de revenus à Lassa-Bas">
+          <img src="images/agr-training-lassabas.jpg" alt="Formation communautaire sur les activités génératrices de revenus à Lassa-Bas">
           <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
         </div>
         <div class="project-body">
@@ -810,7 +715,7 @@
       </div>
       <div class="project-card reveal">
         <div class="project-img">
-          <img src="school-supplies-prep.jpg" alt="Préparation de fournitures scolaires pour l'école primaire de Tchalo">
+          <img src="images/school-supplies-prep.jpg" alt="Préparation de fournitures scolaires pour l'école primaire de Tchalo">
           <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
         </div>
         <div class="project-body">
@@ -821,7 +726,7 @@
       </div>
       <div class="project-card reveal">
         <div class="project-img">
-          <img src="school-kits-adetikope.jpg" alt="Distribution de kits scolaires aux élèves d'Adétikopé">
+          <img src="images/school-kits-adetikope.jpg" alt="Distribution de kits scolaires aux élèves d'Adétikopé">
           <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
         </div>
         <div class="project-body">
@@ -832,7 +737,7 @@
       </div>
       <div class="project-card reveal">
         <div class="project-img">
-          <img src="ramadan-distribution-cacaveli.jpg" alt="Distribution de dates pour la rupture du jeûne du Ramadan à Cacavéli">
+          <img src="images/ramadan-distribution-cacaveli.jpg" alt="Distribution de dates pour la rupture du jeûne du Ramadan à Cacavéli">
           <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
         </div>
         <div class="project-body">
@@ -843,7 +748,7 @@
       </div>
       <div class="project-card reveal">
         <div class="project-img">
-          <img src="eid-distribution-trokpossime.jpg" alt="Célébration de l'Aïd al-Adha à Trokpossimé">
+          <img src="images/eid-distribution-trokpossime.jpg" alt="Célébration de l'Aïd al-Adha à Trokpossimé">
           <span class="status-tag i18n" data-fr="Terminé" data-en="Completed">Terminé</span>
         </div>
         <div class="project-body">
@@ -866,24 +771,18 @@
       <h2 class="i18n" data-fr="Documents officiels" data-en="Official documents">Documents officiels</h2>
       <p class="i18n" data-fr="Consultez et téléchargez nos documents officiels — la transparence est un engagement, pas un slogan." data-en="Browse and download our official documents — transparency is a commitment, not a slogan.">Consultez et téléchargez nos documents officiels — la transparence est un engagement, pas un slogan.</p>
     </div>
-    <div class="reports-grid reports-grid--compact">
+    <div class="reports-grid" style="grid-template-columns:repeat(2,1fr); max-width:620px; margin:0 auto;">
       <div class="report-card reveal">
         <div class="report-icon">📄</div>
         <h4 class="i18n" data-fr="Profil institutionnel" data-en="Institutional profile">Profil institutionnel</h4>
         <div class="year">2026</div>
-        <a href="ACIES_Institutional_Profile.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
-      </div>
-      <div class="report-card reveal">
-        <div class="report-icon">📜</div>
-        <h4 class="i18n" data-fr="Récépissé de déclaration" data-en="Registration receipt">Récépissé de déclaration</h4>
-        <div class="year">N° 0971 · 2023</div>
-        <a href="ACIES_Registration_Certificate.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
+        <a href="documents/ACIES_Institutional_Profile.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
       </div>
       <div class="report-card reveal">
         <div class="report-icon">🖼️</div>
         <h4 class="i18n" data-fr="Annexes photos des activités" data-en="Activity photo annexes">Annexes photos des activités</h4>
         <div class="year">2024–2026</div>
-        <a href="ACIES_Activity_Photos_Annexes.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
+        <a href="documents/ACIES_Activity_Photos_Annexes.pdf" target="_blank" class="report-dl i18n" data-fr="Télécharger ↓" data-en="Download ↓">Télécharger ↓</a>
       </div>
     </div>
   </div>
@@ -904,24 +803,24 @@
       <button class="filter-btn" data-filter="religieux" onclick="filterGallery('religieux', this)">Ramadan & Aïd</button>
     </div>
     <div class="gallery-grid" id="galleryGrid">
-      <div class="gallery-item wide" data-cat="education" onclick="openLightbox(this)"><img src="langabou-proposal-cover.jpg" alt="Élèves de Langabou, Préfecture de Blitta, juillet 2026"></div>
-      <div class="gallery-item tall" data-cat="education" onclick="openLightbox(this)"><img src="school-kits-night.jpg" alt="Élèves avec leurs kits scolaires ACIES"></div>
-      <div class="gallery-item" data-cat="eau" onclick="openLightbox(this)"><img src="water-well-tchikawa.jpg" alt="Préparation d'un point d'eau communautaire à Tchikawa, mai 2024"></div>
-      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="girls-education-assere.jpg" alt="Campagne pour l'éducation des filles à Asséré, août 2024"></div>
-      <div class="gallery-item" data-cat="communaute" onclick="openLightbox(this)"><img src="agr-training-lassabas.jpg" alt="Formation communautaire aux AGR à Lassa-Bas, décembre 2024"></div>
-      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="school-supplies-prep.jpg" alt="Préparation de fournitures scolaires, Tchalo, septembre 2025"></div>
-      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="school-kits-adetikope.jpg" alt="Distribution de kits scolaires à Adétikopé, septembre 2025"></div>
-      <div class="gallery-item" data-cat="religieux" onclick="openLightbox(this)"><img src="ramadan-distribution-cacaveli.jpg" alt="Distribution de dattes pour le Ramadan, Cacavéli, février 2026"></div>
-      <div class="gallery-item wide" data-cat="religieux" onclick="openLightbox(this)"><img src="eid-distribution-trokpossime.jpg" alt="Célébration de l'Aïd al-Adha, Trokpossimé, mai 2026"></div>
-      <div class="gallery-item" data-cat="communaute" onclick="openLightbox(this)"><img src="achievements-infographic.jpg" alt="Bilan des activités et réalisations ACIES 2024-2025"></div>
+      <div class="gallery-item wide" data-cat="education" onclick="openLightbox(this)"><img src="images/langabou-proposal-cover.jpg" alt="Élèves de Langabou, Préfecture de Blitta, juillet 2026"></div>
+      <div class="gallery-item tall" data-cat="education" onclick="openLightbox(this)"><img src="images/school-kits-night.jpg" alt="Élèves avec leurs kits scolaires ACIES"></div>
+      <div class="gallery-item" data-cat="eau" onclick="openLightbox(this)"><img src="images/water-well-tchikawa.jpg" alt="Préparation d'un point d'eau communautaire à Tchikawa, mai 2024"></div>
+      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="images/girls-education-assere.jpg" alt="Campagne pour l'éducation des filles à Asséré, août 2024"></div>
+      <div class="gallery-item" data-cat="communaute" onclick="openLightbox(this)"><img src="images/agr-training-lassabas.jpg" alt="Formation communautaire aux AGR à Lassa-Bas, décembre 2024"></div>
+      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="images/school-supplies-prep.jpg" alt="Préparation de fournitures scolaires, Tchalo, septembre 2025"></div>
+      <div class="gallery-item" data-cat="education" onclick="openLightbox(this)"><img src="images/school-kits-adetikope.jpg" alt="Distribution de kits scolaires à Adétikopé, septembre 2025"></div>
+      <div class="gallery-item" data-cat="religieux" onclick="openLightbox(this)"><img src="images/ramadan-distribution-cacaveli.jpg" alt="Distribution de dattes pour le Ramadan, Cacavéli, février 2026"></div>
+      <div class="gallery-item wide" data-cat="religieux" onclick="openLightbox(this)"><img src="images/eid-distribution-trokpossime.jpg" alt="Célébration de l'Aïd al-Adha, Trokpossimé, mai 2026"></div>
+      <div class="gallery-item" data-cat="communaute" onclick="openLightbox(this)"><img src="images/achievements-infographic.jpg" alt="Bilan des activités et réalisations ACIES 2024-2025"></div>
     </div>
 
     <div style="margin-top:56px;">
       <h3 style="text-align:center; font-size:1.1rem; margin-bottom:20px;" class="i18n" data-fr="Vidéos de nos activités" data-en="Videos of our activities">Vidéos de nos activités</h3>
       <div class="video-grid">
-        <video controls preload="metadata"><source src="acies-video-1.mp4" type="video/mp4"></video>
-        <video controls preload="metadata"><source src="acies-video-2.mp4" type="video/mp4"></video>
-        <video controls preload="metadata"><source src="acies-video-3.mp4" type="video/mp4"></video>
+        <video controls preload="metadata"><source src="videos/acies-video-1.mp4" type="video/mp4"></video>
+        <video controls preload="metadata"><source src="videos/acies-video-2.mp4" type="video/mp4"></video>
+        <video controls preload="metadata"><source src="videos/acies-video-3.mp4" type="video/mp4"></video>
       </div>
     </div>
   </div>
@@ -1021,7 +920,7 @@
 
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:0.8rem; color:#D9E4DC; margin-bottom:6px;" class="i18n" data-fr="Mode de paiement souhaité" data-en="Preferred payment method">Mode de paiement souhaité</label>
-          <select id="donatePaymentMethod" required class="donate-select" style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
+          <select id="donatePaymentMethod" required style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
             <option value="" disabled selected class="i18n" data-fr="— Choisir —" data-en="— Choose —">— Choisir —</option>
             <option class="i18n" data-fr="Mobile Money (Flooz)" data-en="Mobile Money (Flooz)">Mobile Money (Flooz)</option>
             <option class="i18n" data-fr="Mobile Money (T-Money)" data-en="Mobile Money (T-Money)">Mobile Money (T-Money)</option>
@@ -1033,7 +932,7 @@
 
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:0.8rem; color:#D9E4DC; margin-bottom:6px;" class="i18n" data-fr="Type de don" data-en="Donation type">Type de don</label>
-          <select id="donateFrequency" class="donate-select" style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
+          <select id="donateFrequency" style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;">
             <option class="i18n" data-fr="Don unique" data-en="One-time donation">Don unique</option>
             <option class="i18n" data-fr="Don récurrent (mensuel)" data-en="Recurring donation (monthly)">Don récurrent (mensuel)</option>
           </select>
@@ -1103,6 +1002,11 @@
             <p>MAMADOU Assoumanou</p>
           </div>
         </div>
+        <div class="social-row">
+          <a href="https://www.linkedin.com/in/acies-association-1633b1362" target="_blank" rel="noopener" aria-label="LinkedIn ACIES">in</a>
+          <a href="https://x.com/aciestogo" target="_blank" rel="noopener" aria-label="X (Twitter) ACIES">𝕏</a>
+          <a href="https://www.instagram.com/aciestogo/" target="_blank" rel="noopener" aria-label="Instagram ACIES">IG</a>
+        </div>
         <div class="map-embed">
           <iframe src="https://maps.google.com/maps?q=Cacav%C3%A9li%2C%20Lom%C3%A9%2C%20Togo&t=&z=14&ie=UTF8&iwloc=&output=embed" width="100%" height="220" style="border:0;" loading="lazy" title="Carte Cacavéli, Lomé, Togo"></iframe>
         </div>
@@ -1164,6 +1068,11 @@
       </div>
       <p style="font-size:0.88rem; max-width:32ch;" class="i18n" data-fr="Ensemble, nous transformons la compassion en action durable." data-en="Together, we transform compassion into sustainable action.">Ensemble, nous transformons la compassion en action durable.</p>
       <a href="#don" class="btn btn-gold" style="margin-top:18px;" data-fr="Faire un don" data-en="Donate">Faire un don</a>
+      <div class="social-row">
+        <a href="https://www.linkedin.com/in/acies-association-1633b1362" target="_blank" rel="noopener" aria-label="LinkedIn ACIES" style="border-color:rgba(255,255,255,0.25); color:#fff;">in</a>
+        <a href="https://x.com/aciestogo" target="_blank" rel="noopener" aria-label="X (Twitter) ACIES" style="border-color:rgba(255,255,255,0.25); color:#fff;">𝕏</a>
+        <a href="https://www.instagram.com/aciestogo/" target="_blank" rel="noopener" aria-label="Instagram ACIES" style="border-color:rgba(255,255,255,0.25); color:#fff;">IG</a>
+      </div>
     </div>
     <div>
       <h4 class="i18n" data-fr="Liens rapides" data-en="Quick links">Liens rapides</h4>
@@ -1210,23 +1119,6 @@
 </div>
 
 <script>
-  // ---------- Theme toggle ----------
-  function updateThemeIcons(theme){
-    const icon = theme === 'dark' ? '☀️' : '🌙';
-    const btn1 = document.getElementById('themeToggle');
-    const btn2 = document.getElementById('themeToggleMobile');
-    if(btn1) btn1.textContent = icon;
-    if(btn2) btn2.textContent = icon;
-  }
-  function toggleTheme(){
-    const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('acies-theme', next);
-    updateThemeIcons(next);
-  }
-  updateThemeIcons(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
-
   // ---------- Language toggle ----------
   let currentLang = 'fr';
   function setLang(lang){
